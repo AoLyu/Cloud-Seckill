@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ao.cloud.seckill.common.validator.ValidatorImpl,\
+  com.ao.cloud.seckill.common.exception.GlobalExceptionHandler
