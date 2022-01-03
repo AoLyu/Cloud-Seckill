@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @FeignClient(value = "cloud-seckill-user")
 public interface UserFeignClient {
 
-    @GetMapping("/getUserByIdInCache")
-    UserModel getUserByIdInCache(Integer id);
+    @GetMapping("/getUserByIdInCacheByFeign")
+    UserModel getUserByIdInCacheByFeign(Integer id);
 }

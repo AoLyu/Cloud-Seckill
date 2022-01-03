@@ -126,8 +126,8 @@ public class UserController{
     }
 
     //供Feign调用
-    @GetMapping("/getUserByIdInCache")
-    public UserModel getUserByIdInCache(Integer id) {
+    @GetMapping("/getUserByIdInCacheByFeign")
+    public UserModel getUserByIdInCacheByFeign(Integer id) {
         return userService.getUserByIdInCache(id);
     }
 

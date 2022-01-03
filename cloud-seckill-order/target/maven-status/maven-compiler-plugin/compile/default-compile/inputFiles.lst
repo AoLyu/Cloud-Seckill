@@ -1,0 +1,11 @@
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\controller\OrderController.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\service\OrderService.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\model\dataobject\OrderDO.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\mq\MqProducer.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\model\dataobject\SequenceDO.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\OrderApplication.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\feign\ItemFeignClient.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\model\dao\SequenceDOMapper.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\model\pojo\OrderModel.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\service\impl\OrderServiceImpl.java
+F:\IdeaProjects\cloud-seckill\cloud-seckill-order\src\main\java\com\ao\cloud\seckill\order\model\dao\OrderDOMapper.java

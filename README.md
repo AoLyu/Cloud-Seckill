@@ -1,6 +1,6 @@
 ## Seckill System 
 
-Just A Personal Java Practice Project.
+Just a personal Java practice project.
 
 
 

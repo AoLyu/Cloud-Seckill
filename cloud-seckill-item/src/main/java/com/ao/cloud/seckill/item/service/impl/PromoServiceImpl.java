@@ -1,6 +1,5 @@
 package com.ao.cloud.seckill.item.service.impl;
 
-
 import com.ao.cloud.seckill.item.feign.UserFeignClient;
 import com.ao.cloud.seckill.item.model.dao.PromoDOMapper;
 import com.ao.cloud.seckill.item.model.dataobject.PromoDO;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-
 
 @Service
 public class PromoServiceImpl implements PromoService {
@@ -108,7 +105,7 @@ public class PromoServiceImpl implements PromoService {
             return null;
         }
         //判断用户信息是否存在
-        UserModel userModel = userFeignClient.getUserByIdInCache(userId);
+        UserModel userModel = userFeignClient.getUserByIdInCacheByFeign(userId);
         if(userModel == null){
             return null;
         }
