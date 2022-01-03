@@ -10,6 +10,10 @@ public enum CloudSeckillExceptionEnum {
     USER_NOT_EXIST(10002,"用户不存在"),
     USER_LOGIN_FAIL(10003,"用户登录失败"),
     PARAMETER_VALIDATION_ERROR(10004,"短信验证码错误"),
+    UNKNOWN_ERROR(10005,"未知错误"),
+    USER_NOT_LOGIN(10006,"用户未登录"),
+    STOCK_NOT_ENOUGH(10007,"库存不够"),
+    RATELIMIT(10008,"限流中"),
     SYSTEM_ERROR(20000,"系统异常");
 
 

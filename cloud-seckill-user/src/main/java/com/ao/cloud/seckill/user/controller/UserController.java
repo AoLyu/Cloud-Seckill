@@ -125,4 +125,10 @@ public class UserController{
         return ApiRestResponse.success(uuidToken);
     }
 
+    //供Feign调用
+    @GetMapping("/getUserByIdInCache")
+    public UserModel getUserByIdInCache(Integer id) {
+        return userService.getUserByIdInCache(id);
+    }
+
 }
