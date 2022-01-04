@@ -13,10 +13,9 @@ public interface UserService {
 
     @Transactional
     void register(UserModel userModel);
-
     /*
-        telphone:用户注册手机
-        password:用户加密后的密码
-         */
+    telphone:用户注册手机
+    password:用户加密后的密码
+     */
     UserModel validateLogin(String telphone,String encrptPassword);
 }

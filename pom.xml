@@ -10,6 +10,7 @@
         <module>cloud-seckill-zuul</module>
         <module>cloud-seckill-item</module>
         <module>cloud-seckill-order</module>
+        <module>cloud-seckill-auth</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
