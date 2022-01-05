@@ -73,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>com.ao</groupId>
-            <artifactId>cloud-seckill-user</artifactId>
+            <artifactId>cloud-seckill-auth</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

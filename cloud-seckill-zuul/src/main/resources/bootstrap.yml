@@ -20,21 +20,5 @@ zuul:
     cloud-seckill-user: /user/**
     cloud-seckill-item: /item/**
     cloud-seckill-order: /order/**
+    cloud-seckill-auth: /auth/**
   sensitive-headers:
-
-security:
-  redis:
-    host: 192.168.174.18
-    port: 6379
-    database: 1
-    password: root123456
-  oauth2:
-    client:
-      clientId: app
-      clientSecret: app
-      grant-type: mobileapp
-    resource:
-      token-info-uri: http://localhost:2000/oauth/check_token
-      prefer-token-info: true
-      jwt:
-        key-uri: http://localhost:2000/oauth/token_key
