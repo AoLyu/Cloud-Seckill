@@ -1,4 +1,5 @@
-package com.ao.cloud.seckill.auth.component;
+package com.ao.cloud.seckill.zuul.component;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -10,16 +11,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class AuthExceptionEntryPoint implements AuthenticationEntryPoint
 {
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws ServletException {
-        Map<String, Object> map = new HashMap<String, Object>();
         Throwable cause = authException.getCause();
 
         response.setStatus(HttpStatus.OK.value());
