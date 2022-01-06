@@ -1,6 +1,5 @@
 package com.ao.cloud.seckill.auth.config;
 
-
 import com.ao.cloud.seckill.auth.model.dataobject.User;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -11,8 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @className: com.lujunxiong.springsecurityoauth2.config-> JwtTokenEnhancer
- * @author: junxiong.lu
+
  * @createDate: 2021-12-12 16:19
  * @description: JWT内容增强器
  */

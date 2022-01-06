@@ -6,7 +6,6 @@
     <modules>
         <module>cloud-seckill-eureka-server</module>
         <module>cloud-seckill-common</module>
-        <module>cloud-seckill-user</module>
         <module>cloud-seckill-zuul</module>
         <module>cloud-seckill-item</module>
         <module>cloud-seckill-order</module>

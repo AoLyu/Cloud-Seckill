@@ -7,7 +7,7 @@ import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.item.model.pojo.PromoModel;
 import com.ao.cloud.seckill.item.service.ItemService;
 import com.ao.cloud.seckill.item.service.PromoService;
-import com.ao.cloud.seckill.user.model.pojo.UserModel;
+import com.ao.cloud.seckill.auth.model.pojo.UserModel;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

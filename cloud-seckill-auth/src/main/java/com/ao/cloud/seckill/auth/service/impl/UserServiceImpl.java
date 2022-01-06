@@ -5,6 +5,7 @@ import com.ao.cloud.seckill.auth.model.dao.UserDOMapper;
 import com.ao.cloud.seckill.auth.model.dao.UserPasswordDOMapper;
 import com.ao.cloud.seckill.auth.model.dataobject.UserDO;
 import com.ao.cloud.seckill.auth.model.dataobject.UserPasswordDO;
+import com.ao.cloud.seckill.auth.model.pojo.User;
 import com.ao.cloud.seckill.auth.model.pojo.UserModel;
 import com.ao.cloud.seckill.auth.service.UserService;
 import com.ao.cloud.seckill.common.exception.CloudSeckillExceptionEnum;
@@ -49,6 +50,8 @@ public class UserServiceImpl implements UserService {
 
         return convertFromDataObject(userDO,userPasswordDO);
     }
+
+
 
     @Override
     public UserModel getUserByIdInCache(Integer id) {

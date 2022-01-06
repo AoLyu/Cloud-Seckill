@@ -1,6 +1,7 @@
 package com.ao.cloud.seckill.auth.service;
 
 
+import com.ao.cloud.seckill.auth.model.pojo.User;
 import com.ao.cloud.seckill.auth.model.pojo.UserModel;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ public interface UserService {
 
     @Transactional
     void register(UserModel userModel);
+
     /*
     telphone:用户注册手机
     password:用户加密后的密码

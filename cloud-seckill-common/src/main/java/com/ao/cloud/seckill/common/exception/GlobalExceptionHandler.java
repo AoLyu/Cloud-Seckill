@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
         return ApiRestResponse.error(CloudSeckillExceptionEnum.SYSTEM_ERROR );
     }
 
+
     @ExceptionHandler(CloudSekillException.class)
     public  ApiRestResponse handlerCloudSeckillException(CloudSekillException e){
         log.error("CloudSeckillException: ", e.getMsg());

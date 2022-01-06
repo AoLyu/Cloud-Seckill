@@ -10,8 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * @className: com.lujunxiong.springsecurityoauth2.config-> SecurityConfig
- * @author: junxiong.lu
  * @createDate: 2021-10-16 17:55
  * @description: Spring Security 配置类
  */
@@ -44,5 +42,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .permitAll();
     }
+
+
+//    /**
+//     * 配置用户签名服务 主要是user-details 机制，身份验证管理生成器
+//     * @param auth 签名管理器构造器，用于构建用户具体权限控制
+//     * @throws Exception
+//     */
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception;
+//    /**
+//     * 用来构建 Filter 链
+//     * @param web
+//     * @throws Exception
+//     */
+//    public void configure(WebSecurity web) throws Exception;
+//    /**
+//     * 用来配置拦截保护的请求, HTTP请求安全处理
+//     * @param http
+//     * @throws Exception
+//     */
+//    protected void configure(HttpSecurity http) throws Exception;
+
+
 
 }

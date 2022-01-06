@@ -1,6 +1,6 @@
 package com.ao.cloud.seckill.auth.config;
 
-import com.lujunxiong.springsecurityoauth2.service.UserService;
+import com.ao.cloud.seckill.auth.service.impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -20,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @className: com.lujunxiong.springsecurityoauth2.config-> AuthorizationServerConfig
- * @author: junxiong.lu
+
  * @createDate: 2021-10-16 17:59
  * @description: 授权服务器配置
  */
@@ -33,7 +33,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserService userService;
+    private UserDetailServiceImpl userDetailService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -64,11 +64,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         delegates.add(jwtAccessTokenConverter);
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(userService)
+                .userDetailsService(userDetailService)
                 //配置存储令牌策略
                 .tokenStore(tokenStore)
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(enhancerChain);
+
     }
 
 
@@ -84,7 +85,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 //配置刷新token的有效期
                 .refreshTokenValiditySeconds(86400)
                 //配置redirect_uri,用于授权成功后跳转
-                .redirectUris("http://www.baidu.com")
+                .redirectUris("localhost:8093/oauth/login")
+                .autoApprove(true)
                 //配置申请的权限范围
                 .scopes("all")
                 //配置grant_type,表示授权类型
@@ -95,4 +97,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         //应当用授权服务器clients.withClientDetails(clientDetailsService);
 
     }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        security.tokenKeyAccess("isAuthenticated()");
+
+    }
+
 }

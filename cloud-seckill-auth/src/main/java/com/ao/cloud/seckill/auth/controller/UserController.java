@@ -1,5 +1,6 @@
 package com.ao.cloud.seckill.auth.controller;
 
+import com.ao.cloud.seckill.auth.model.pojo.Oauth2TokenDto;
 import com.ao.cloud.seckill.auth.model.pojo.UserModel;
 import com.ao.cloud.seckill.auth.model.vo.UserVO;
 import com.ao.cloud.seckill.auth.service.UserService;
@@ -11,6 +12,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -126,6 +132,23 @@ public class UserController{
 
         //下发了token
         return ApiRestResponse.success(uuidToken);
+    }
+
+    @Autowired
+    private TokenEndpoint tokenEndpoint;
+
+    /**
+     * Oauth2登录认证
+     */
+    @PostMapping(value = "/oauth/token")
+    public ApiRestResponse postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        Oauth2TokenDto oauth2TokenDto = Oauth2TokenDto.builder()
+                .token(oAuth2AccessToken.getValue())
+                .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
+                .expiresIn(oAuth2AccessToken.getExpiresIn())
+                .tokenHead("Bearer ").build();
+        return ApiRestResponse.success(oauth2TokenDto);
     }
 
     //供Feign调用

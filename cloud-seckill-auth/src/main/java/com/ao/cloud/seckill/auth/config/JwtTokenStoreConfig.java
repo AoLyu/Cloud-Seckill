@@ -7,8 +7,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 /**
- * @className: com.lujunxiong.springsecurityoauth2.config-> JwtTokenStoreConfig
- * @author: junxiong.lu
+
  * @createDate: 2021-12-12 15:50
  * @description: 使用Jwt存储token的配置
  */

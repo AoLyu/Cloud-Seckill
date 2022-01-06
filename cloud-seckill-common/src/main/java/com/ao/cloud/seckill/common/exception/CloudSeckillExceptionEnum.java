@@ -14,6 +14,8 @@ public enum CloudSeckillExceptionEnum {
     USER_NOT_LOGIN(10006,"用户未登录"),
     STOCK_NOT_ENOUGH(10007,"库存不够"),
     RATELIMIT(10008,"限流中"),
+    AUTHENTICATION_ERROR(10009,"认证错误"),
+    GATEWAY_ERROE(10010,"网关错误"),
     SYSTEM_ERROR(20000,"系统异常");
 
 
