@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/auth/**")
                 .permitAll()
-                .antMatchers("/**")
+                .anyRequest()
                 .authenticated()
                 ;//配置需要保护的资源路径
     }

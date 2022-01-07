@@ -13,6 +13,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,6 +56,13 @@ public class ItemController  {
         ItemVO itemVO = convertVOFromModel(itemModelForReturn);
 
         return ApiRestResponse.success(itemVO);
+    }
+
+    @PostMapping(value = "/getone")
+    public ApiRestResponse getOne(){
+        String userId = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
+                .getHeader("user_id");
+        return ApiRestResponse.success(userId);
     }
 
     @PostMapping(value = "/publishpromo")
@@ -121,7 +130,10 @@ public class ItemController  {
     }
 
     @PostMapping("generateSecondKillTokenByFeign")
-    public String generateSecondKillTokenByFeign(Integer promoId,Integer itemId,Integer userId){
+    public String generateSecondKillTokenByFeign(Integer promoId,Integer itemId){
+
+        String userId = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
+                .getHeader("user_id");
         return promoService.generateSecondKillToken(promoId,itemId,userId);
     }
 

@@ -43,7 +43,7 @@ public class UserController{
     private RedisTemplate redisTemplate;
 
     //用户注册接口
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/user/register")
     public ApiRestResponse register(@RequestParam(name="telephone")String telephone,
                                     @RequestParam(name="otpCode")String otpCode,
                                     @RequestParam(name="name")String name,
@@ -68,7 +68,7 @@ public class UserController{
     }
 
     //用户获取otp短信接口
-    @GetMapping(value = "/getotp")
+    @GetMapping(value = "/user/getotp")
     public ApiRestResponse getOtp(@RequestParam(name="telephone")String telephone){
         //需要按照一定的规则生成OTP验证码
         Random random = new Random();

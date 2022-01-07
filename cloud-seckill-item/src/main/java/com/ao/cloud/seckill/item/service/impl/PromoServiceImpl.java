@@ -1,18 +1,18 @@
 package com.ao.cloud.seckill.item.service.impl;
 
-import com.ao.cloud.seckill.item.feign.UserFeignClient;
 import com.ao.cloud.seckill.item.model.dao.PromoDOMapper;
 import com.ao.cloud.seckill.item.model.dataobject.PromoDO;
 import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.item.model.pojo.PromoModel;
 import com.ao.cloud.seckill.item.service.ItemService;
 import com.ao.cloud.seckill.item.service.PromoService;
-import com.ao.cloud.seckill.auth.model.pojo.UserModel;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -30,8 +30,8 @@ public class PromoServiceImpl implements PromoService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Autowired
-    private UserFeignClient userFeignClient;
+//    @Autowired
+//    private UserFeignClient userFeignClient;
 
     @Override
     public PromoModel getPromoByItemId(Integer itemId) {
@@ -73,7 +73,7 @@ public class PromoServiceImpl implements PromoService {
     }
 
     @Override
-    public String generateSecondKillToken(Integer promoId,Integer itemId,Integer userId) {
+    public String generateSecondKillToken(Integer promoId,Integer itemId,String userId) {
 
         //判断是否库存已售罄，若对应的售罄key存在，则直接返回下单失败
         if(redisTemplate.hasKey("promo_item_stock_invalid_"+itemId)){
@@ -105,10 +105,10 @@ public class PromoServiceImpl implements PromoService {
             return null;
         }
         //判断用户信息是否存在
-        UserModel userModel = userFeignClient.getUserByIdInCacheByFeign(userId);
-        if(userModel == null){
-            return null;
-        }
+//        UserModel userModel = userFeignClient.getUserByIdInCacheByFeign(userId);
+//        if(userModel == null){
+//            return null;
+//        }
 
         //获取秒杀大闸的count数量
         long result = redisTemplate.opsForValue().increment("promo_door_count_"+promoId,-1);
