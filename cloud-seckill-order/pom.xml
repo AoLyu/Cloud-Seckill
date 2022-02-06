@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>28.2-jre</version>
         </dependency>
 
         <dependency>
@@ -74,16 +74,8 @@
 
         <dependency>
             <groupId>com.ao</groupId>
-            <artifactId>cloud-seckill-user</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ao</groupId>
             <artifactId>cloud-seckill-item</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>

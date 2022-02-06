@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -60,9 +61,9 @@ public class ItemController  {
 
     @PostMapping(value = "/getone")
     public ApiRestResponse getOne(){
-        String userId = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
-                .getHeader("user_id");
-        return ApiRestResponse.success(userId);
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        String userId = request.getHeader("user_id");
+        return ApiRestResponse.success("Current User Id is:"+userId);
     }
 
     @PostMapping(value = "/publishpromo")

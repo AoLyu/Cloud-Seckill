@@ -5,24 +5,21 @@ import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "cloud-seckill-item")
 public interface ItemFeignClient {
-
     @PostMapping("/generateSecondKillTokenByFeign")
-    String generateSecondKillTokenByFeign(Integer promoId,Integer itemId,Integer userId);
+    String generateSecondKillTokenByFeign(@RequestParam("promoId") Integer promoId,@RequestParam("itemId") Integer itemId);
 
     @PostMapping("/initStockLogByFeign")
-    String initStockLogByFeign(Integer itemId,Integer amount);
+    String initStockLogByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("amount") Integer amount);
 
     @GetMapping("/getItemByIdInCacheByFeign")
     ItemModel getItemByIdInCacheByFeign(Integer id);
 
     @PostMapping("/decreaseStockByFeign")
-    boolean decreaseStockByFeign(Integer itemId,Integer amount);
-
-    @PostMapping("/increaseSalesByFeign")
-    void increaseSalesByFeign(Integer itemId,Integer amount);
+    boolean decreaseStockByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("amount") Integer amount);
 
     @GetMapping("/getStockLogDOByIdByFeign")
     StockLogDO getStockLogDOByIdByFeign(String stockLogId);
@@ -30,4 +27,6 @@ public interface ItemFeignClient {
     @PostMapping("/updateStockLogDOByFeign")
     int updateStockLogDOByFeign(StockLogDO record);
 
+    @PostMapping("/increaseSalesByFeign")
+    void increaseSalesByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("amount") Integer amount);
 }

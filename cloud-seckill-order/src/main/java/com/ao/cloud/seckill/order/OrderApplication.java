@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @EnableFeignClients
-@MapperScan(basePackages = "com.ao.cloud.seckill.item.model.dao")
+@MapperScan(basePackages = "com.ao.cloud.seckill.order.model.dao")
 @EnableRedisHttpSession
 public class OrderApplication {
     public static void main(String[] args) {
