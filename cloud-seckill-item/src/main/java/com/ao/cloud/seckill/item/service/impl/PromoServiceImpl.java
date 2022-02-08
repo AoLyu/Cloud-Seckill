@@ -11,8 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -30,20 +28,15 @@ public class PromoServiceImpl implements PromoService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-//    @Autowired
-//    private UserFeignClient userFeignClient;
-
     @Override
     public PromoModel getPromoByItemId(Integer itemId) {
         //获取对应商品的秒杀活动信息
         PromoDO promoDO = promoDOMapper.selectByItemId(itemId);
-
         //dataobject->model
         PromoModel promoModel = convertFromDataObject(promoDO);
         if(promoModel == null){
             return null;
         }
-
         //判断当前时间是否秒杀活动即将开始或正在进行
         if(promoModel.getStartDate().isAfterNow()){
             promoModel.setStatus(1);
@@ -109,7 +102,6 @@ public class PromoServiceImpl implements PromoService {
 //        if(userModel == null){
 //            return null;
 //        }
-
         //获取秒杀大闸的count数量
         long result = redisTemplate.opsForValue().increment("promo_door_count_"+promoId,-1);
         if(result < 0){
@@ -117,10 +109,8 @@ public class PromoServiceImpl implements PromoService {
         }
         //生成token并且存入redis内并给一个5分钟的有效期
         String token = UUID.randomUUID().toString().replace("-","");
-
         redisTemplate.opsForValue().set("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId,token);
         redisTemplate.expire("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId,5, TimeUnit.MINUTES);
-
         return token;
     }
 

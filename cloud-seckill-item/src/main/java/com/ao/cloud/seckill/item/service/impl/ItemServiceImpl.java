@@ -110,7 +110,6 @@ public class ItemServiceImpl implements ItemService {
         //操作获得库存数量
         ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
 
-
         //将dataobject->model
         ItemModel itemModel = convertModelFromDataObject(itemDO,itemStockDO);
 
@@ -132,8 +131,6 @@ public class ItemServiceImpl implements ItemService {
         }
         return itemModel;
     }
-
-
 
     @Override
     @Transactional

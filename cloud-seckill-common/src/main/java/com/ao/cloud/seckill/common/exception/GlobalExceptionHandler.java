@@ -8,6 +8,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,12 @@ public class GlobalExceptionHandler {
     public ApiRestResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         log.error("MethodArgumentNotValidException: " ,e);
         return handleBindingResult(e.getBindingResult());
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ApiRestResponse handlerNotFoundException(NoHandlerFoundException e){
+        log.error("MethodArgumentNotValidException: " ,e);
+        return ApiRestResponse.error(CloudSeckillExceptionEnum.REQUEST_ERROR);
     }
 
     private ApiRestResponse handleBindingResult(BindingResult result){

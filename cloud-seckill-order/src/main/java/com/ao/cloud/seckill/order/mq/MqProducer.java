@@ -112,7 +112,6 @@ public class MqProducer {
                 JSON.toJSON(bodyMap).toString().getBytes(Charset.forName("UTF-8")));
         TransactionSendResult sendResult = null;
         try {
-
             sendResult = transactionMQProducer.sendMessageInTransaction(message,argsMap);
         } catch (MQClientException e) {
             e.printStackTrace();
@@ -125,7 +124,6 @@ public class MqProducer {
         }else{
             return false;
         }
-
     }
 
     //同步库存扣减消息

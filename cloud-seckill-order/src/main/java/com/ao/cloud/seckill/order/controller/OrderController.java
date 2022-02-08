@@ -51,28 +51,26 @@ public class OrderController  {
     @PostConstruct
     public void init(){
         executorService = Executors.newFixedThreadPool(20);
-
         orderCreateRateLimiter = RateLimiter.create(300);
-
     }
 
     //生成验证码
     @RequestMapping(value = "/generateverifycode",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void generateverifycode(HttpServletResponse response) throws CloudSekillException, IOException {
-        String token = httpServletRequest.getParameterMap().get("token")[0];
-        if(StringUtils.isEmpty(token)){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能生成验证码");
-        }
+//        String token = httpServletRequest.getParameterMap().get("token")[0];
+//        if(StringUtils.isEmpty(token)){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能生成验证码");
+//        }
         //未登录时，网关拦截了
 //        UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
 //        if(userModel == null){
 //            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能生成验证码");
 //        }
-
         //从header中获取uerId;
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
+        String id =httpServletRequest.getHeader("user_id");
 
         Map<String,Object> map = CodeUtil.generateCodeAndPic();
 
@@ -80,10 +78,7 @@ public class OrderController  {
         redisTemplate.expire("verify_code_"+userId,10,TimeUnit.MINUTES);
 
         ImageIO.write((RenderedImage) map.get("codePic"), "jpeg", response.getOutputStream());
-
-
     }
-
 
     //生成秒杀令牌
     @PostMapping(value = "/generatetoken")
@@ -91,17 +86,16 @@ public class OrderController  {
                                          @RequestParam(name="promoId")Integer promoId,
                                          @RequestParam(name="verifyCode")String verifyCode) throws CloudSekillException {
         //根据token获取用户信息
-        String token = httpServletRequest.getParameterMap().get("token")[0];
-        if(StringUtils.isEmpty(token)){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能下单");
-        }
+//        String token = httpServletRequest.getParameterMap().get("token")[0];
+//        if(StringUtils.isEmpty(token)){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能下单");
+//        }
         //未登录网关拦截了
         //获取用户的登陆信息
 //        UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
 //        if(userModel == null){
 //            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能下单");
 //        }
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
 
@@ -113,7 +107,6 @@ public class OrderController  {
         if(!redisVerifyCode.equalsIgnoreCase(verifyCode)){
             throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"请求非法，验证码错误");
         }
-
         //获取秒杀访问令牌
         String promoToken = itemFeignClient.generateSecondKillTokenByFeign(promoId,itemId);
 
@@ -133,15 +126,13 @@ public class OrderController  {
         if(!orderCreateRateLimiter.tryAcquire()){
             throw new CloudSekillException(CloudSeckillExceptionEnum.RATELIMIT);
         }
-
-        String token = httpServletRequest.getParameterMap().get("token")[0];
-        if(StringUtils.isEmpty(token)){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能下单");
-        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
-
         //未登录的用户，网关拦截了
+//        String token = httpServletRequest.getParameterMap().get("token")[0];
+//        if(StringUtils.isEmpty(token)){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能下单");
+//        }
         //获取用户的登陆信息
 //        UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
 //        if(userModel == null){
@@ -157,17 +148,13 @@ public class OrderController  {
                 throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"秒杀令牌校验失败");
             }
         }
-
         //同步调用线程池的submit方法
         //拥塞窗口为20的等待队列，用来队列化泄洪
         Future<Object> future = executorService.submit(new Callable<Object>() {
-
             @Override
             public Object call() throws Exception {
                 //加入库存流水init状态
                 String stockLogId = itemFeignClient.initStockLogByFeign(itemId,amount);
-
-
                 //再去完成对应的下单事务型消息机制
                 if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,promoId,amount,stockLogId)){
                     throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
@@ -175,7 +162,6 @@ public class OrderController  {
                 return null;
             }
         });
-
         try {
             future.get();
         } catch (InterruptedException e) {
@@ -183,7 +169,6 @@ public class OrderController  {
         } catch (ExecutionException e) {
             throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR);
         }
-
         return ApiRestResponse.success(null);
     }
 
