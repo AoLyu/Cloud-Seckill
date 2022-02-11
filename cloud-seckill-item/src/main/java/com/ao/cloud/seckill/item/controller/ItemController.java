@@ -2,7 +2,6 @@ package com.ao.cloud.seckill.item.controller;
 
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import com.ao.cloud.seckill.common.response.ApiRestResponse;
-import com.ao.cloud.seckill.item.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.item.model.vo.ItemVO;
 import com.ao.cloud.seckill.item.service.CacheService;
@@ -138,33 +137,11 @@ public class ItemController  {
         return promoService.generateSecondKillToken(promoId,itemId,userId);
     }
 
-    @PostMapping("/initStockLogByFeign")
-    public String initStockLogByFeign(Integer itemId,Integer amount){
-        return itemService.initStockLog(itemId,amount);
-    }
-
     @GetMapping("/getItemByIdInCacheByFeign")
     public ItemModel getItemByIdInCacheByFeign(Integer id){
         return itemService.getItemByIdInCache(id);
     }
 
-    @PostMapping("/decreaseStockByFeign")
-    public boolean decreaseStockByFeign(Integer itemId,Integer amount){
-        return itemService.decreaseStock(itemId,amount);
-    }
 
-    @PostMapping("/increaseSalesByFeign")
-    public void increaseSalesByFeign(Integer itemId,Integer amount){
-        itemService.increaseSales(itemId,amount);
-    }
 
-    @GetMapping("/getStockLogDOByIdByFeign")
-    public StockLogDO getStockLogDOByIdByFeign(String stockLogId){
-        return itemService.getStockLogDOById(stockLogId);
-    }
-
-    @PostMapping("/updateStockLogDOByFeign")
-    public int updateStockLogDOByFeign(StockLogDO record){
-        return itemService.updateStockLogDO(record);
-    }
 }

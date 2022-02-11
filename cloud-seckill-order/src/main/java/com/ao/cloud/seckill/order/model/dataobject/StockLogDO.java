@@ -1,4 +1,4 @@
-package com.ao.cloud.seckill.item.model.dataobject;
+package com.ao.cloud.seckill.order.model.dataobject;
 
 public class StockLogDO {
 

@@ -3,13 +3,14 @@ package com.ao.cloud.seckill.order.service.impl;
 
 import com.ao.cloud.seckill.common.exception.CloudSeckillExceptionEnum;
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
-import com.ao.cloud.seckill.item.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.order.feign.ItemFeignClient;
 import com.ao.cloud.seckill.order.model.dao.OrderDOMapper;
 import com.ao.cloud.seckill.order.model.dao.SequenceDOMapper;
+import com.ao.cloud.seckill.order.model.dao.StockLogDOMapper;
 import com.ao.cloud.seckill.order.model.dataobject.OrderDO;
 import com.ao.cloud.seckill.order.model.dataobject.SequenceDO;
+import com.ao.cloud.seckill.order.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.order.model.pojo.OrderModel;
 import com.ao.cloud.seckill.order.mq.MqProducer;
 import com.ao.cloud.seckill.order.service.OrderService;
@@ -24,12 +25,15 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SequenceDOMapper sequenceDOMapper;
+
+    private StockLogDOMapper stockLogDOMapper;
 
     @Autowired
     private MqProducer mqProducer;
@@ -54,11 +58,11 @@ public class OrderServiceImpl implements OrderService {
             throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"数量信息不正确");
         }
 
-        //2.落单减库存
-        boolean result = itemFeignClient.decreaseStockByFeign(itemId,amount);
-        if(!result){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.STOCK_NOT_ENOUGH);
-        }
+        //2.落单减库存    // 使用RocketMq异步扣减
+//        boolean result = itemFeignClient.decreaseStockByFeign(itemId,amount);
+//        if(!result){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.STOCK_NOT_ENOUGH);
+//        }
 
         //3.订单入库
         OrderModel orderModel = new OrderModel();
@@ -78,16 +82,16 @@ public class OrderServiceImpl implements OrderService {
         OrderDO orderDO = convertFromOrderModel(orderModel);
         orderDOMapper.insertSelective(orderDO);
 
-        //加上商品的销量
-        itemFeignClient.increaseSalesByFeign(itemId,amount);
+        //加上商品的销量  , 异步扣减的时候更新销量
+//        itemFeignClient.increaseSalesByFeign(itemId,amount);
 
         //设置库存流水状态为成功
-        StockLogDO stockLogDO = itemFeignClient.getStockLogDOByIdByFeign(stockLogId);
+        StockLogDO stockLogDO = stockLogDOMapper.selectByPrimaryKey(stockLogId);
         if(stockLogDO == null){
             throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR);
         }
         stockLogDO.setStatus(2);
-        itemFeignClient.updateStockLogDOByFeign(stockLogDO);
+        stockLogDOMapper.updateByPrimaryKeySelective(stockLogDO);
 
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
                 @Override
@@ -145,5 +149,29 @@ public class OrderServiceImpl implements OrderService {
         orderDO.setItemPrice(orderModel.getItemPrice().doubleValue());
         orderDO.setOrderPrice(orderModel.getOrderPrice().doubleValue());
         return orderDO;
+    }
+
+    //初始化对应的库存流水
+    @Override
+    @Transactional
+    public String initStockLog(Integer itemId, Integer amount) {
+        StockLogDO stockLogDO = new StockLogDO();
+        stockLogDO.setItemId(itemId);
+        stockLogDO.setAmount(amount);
+        stockLogDO.setStockLogId(UUID.randomUUID().toString().replace("-",""));
+        stockLogDO.setStatus(1);
+        stockLogDOMapper.insertSelective(stockLogDO);
+        return stockLogDO.getStockLogId();
+    }
+
+
+    @Override
+    public StockLogDO getStockLogDOById(String stockLogId){
+        return stockLogDOMapper.selectByPrimaryKey(stockLogId);
+    }
+
+    @Override
+    public int updateStockLogDO(StockLogDO record){
+        return  stockLogDOMapper.updateByPrimaryKeySelective(record);
     }
 }

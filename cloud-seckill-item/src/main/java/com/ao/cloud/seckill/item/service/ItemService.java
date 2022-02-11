@@ -2,7 +2,6 @@ package com.ao.cloud.seckill.item.service;
 
 
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
-import com.ao.cloud.seckill.item.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 
 import java.util.List;
@@ -33,11 +32,4 @@ public interface ItemService {
     //商品销量增加
     void increaseSales(Integer itemId,Integer amount)throws CloudSekillException;
 
-    //初始化库存流水
-    String initStockLog(Integer itemId,Integer amount);
-
-    //获取流水
-    StockLogDO getStockLogDOById(String stockLogId);
-
-    int updateStockLogDO(StockLogDO record);
 }

@@ -6,10 +6,8 @@ import com.ao.cloud.seckill.common.validator.ValidationResult;
 import com.ao.cloud.seckill.common.validator.ValidatorImpl;
 import com.ao.cloud.seckill.item.model.dao.ItemDOMapper;
 import com.ao.cloud.seckill.item.model.dao.ItemStockDOMapper;
-import com.ao.cloud.seckill.item.model.dao.StockLogDOMapper;
 import com.ao.cloud.seckill.item.model.dataobject.ItemDO;
 import com.ao.cloud.seckill.item.model.dataobject.ItemStockDO;
-import com.ao.cloud.seckill.item.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.item.model.pojo.PromoModel;
 import com.ao.cloud.seckill.item.service.ItemService;
@@ -43,9 +41,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    @Autowired
-    private StockLogDOMapper stockLogDOMapper;
 
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel){
         if(itemModel == null){
@@ -166,22 +161,6 @@ public class ItemServiceImpl implements ItemService {
         itemDOMapper.increaseSales(itemId,amount);
     }
 
-    //初始化对应的库存流水
-    @Override
-    @Transactional
-    public String initStockLog(Integer itemId, Integer amount) {
-        StockLogDO stockLogDO = new StockLogDO();
-        stockLogDO.setItemId(itemId);
-        stockLogDO.setAmount(amount);
-        stockLogDO.setStockLogId(UUID.randomUUID().toString().replace("-",""));
-        stockLogDO.setStatus(1);
-
-        stockLogDOMapper.insertSelective(stockLogDO);
-
-        return stockLogDO.getStockLogId();
-
-    }
-
     private ItemModel convertModelFromDataObject(ItemDO itemDO,ItemStockDO itemStockDO){
         ItemModel itemModel = new ItemModel();
         BeanUtils.copyProperties(itemDO,itemModel);
@@ -190,15 +169,4 @@ public class ItemServiceImpl implements ItemService {
 
         return itemModel;
     }
-
-    @Override
-    public StockLogDO getStockLogDOById(String stockLogId){
-        return stockLogDOMapper.selectByPrimaryKey(stockLogId);
-    }
-
-    @Override
-    public int updateStockLogDO(StockLogDO record){
-        return  stockLogDOMapper.updateByPrimaryKeySelective(record);
-    }
-
 }

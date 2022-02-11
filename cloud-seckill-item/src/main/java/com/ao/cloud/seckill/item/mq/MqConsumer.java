@@ -1,6 +1,7 @@
 package com.ao.cloud.seckill.item.mq;
 
 import com.alibaba.fastjson.JSON;
+import com.ao.cloud.seckill.item.model.dao.ItemDOMapper;
 import com.ao.cloud.seckill.item.model.dao.ItemStockDOMapper;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -30,6 +31,9 @@ public class MqConsumer {
     @Autowired
     private ItemStockDOMapper itemStockDOMapper;
 
+    @Autowired
+    private ItemDOMapper itemDOMapper;
+
     @PostConstruct
     public void init() throws MQClientException {
         consumer = new DefaultMQPushConsumer("stock_consumer_group");
@@ -47,6 +51,9 @@ public class MqConsumer {
                 Integer amount = (Integer) map.get("amount");
 
                 itemStockDOMapper.decreaseStock(itemId,amount);
+                //更新销量
+                itemDOMapper.increaseSales(itemId,amount);
+
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });

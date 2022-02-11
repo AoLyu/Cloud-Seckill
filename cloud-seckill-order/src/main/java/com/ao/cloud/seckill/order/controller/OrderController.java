@@ -6,6 +6,7 @@ import com.ao.cloud.seckill.common.response.ApiRestResponse;
 import com.ao.cloud.seckill.common.util.CodeUtil;
 import com.ao.cloud.seckill.order.feign.ItemFeignClient;
 import com.ao.cloud.seckill.order.mq.MqProducer;
+import com.ao.cloud.seckill.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
@@ -31,6 +32,9 @@ public class OrderController  {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private MqProducer mqProducer;
@@ -158,7 +162,7 @@ public class OrderController  {
             @Override
             public Object call() throws Exception {
                 //加入库存流水init状态
-                String stockLogId = itemFeignClient.initStockLogByFeign(itemId,amount);
+                String stockLogId = orderService.initStockLog(itemId,amount);
                 //再去完成对应的下单事务型消息机制
                 if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,promoId,amount,stockLogId)){
                     throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");

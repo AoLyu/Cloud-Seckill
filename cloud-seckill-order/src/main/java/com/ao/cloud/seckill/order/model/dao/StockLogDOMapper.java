@@ -1,7 +1,7 @@
-package com.ao.cloud.seckill.item.model.dao;
+package com.ao.cloud.seckill.order.model.dao;
 
 
-import com.ao.cloud.seckill.item.model.dataobject.StockLogDO;
+import com.ao.cloud.seckill.order.model.dataobject.StockLogDO;
 import org.springframework.stereotype.Repository;
 
 @Repository

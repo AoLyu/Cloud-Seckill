@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ao.cloud.seckill.item.model.dao.StockLogDOMapper">
-  <resultMap id="BaseResultMap" type="com.ao.cloud.seckill.item.model.dataobject.StockLogDO">
+<mapper namespace="com.ao.cloud.seckill.order.model.dao.StockLogDOMapper">
+  <resultMap id="BaseResultMap" type="com.ao.cloud.seckill.order.model.dataobject.StockLogDO">
     <id column="stock_log_id" jdbcType="VARCHAR" property="stockLogId" />
     <result column="item_id" jdbcType="INTEGER" property="itemId" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
@@ -20,13 +20,13 @@
     delete from stock_log
     where stock_log_id = #{stockLogId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ao.cloud.seckill.item.model.dataobject.StockLogDO">
+  <insert id="insert" parameterType="com.ao.cloud.seckill.order.model.dataobject.StockLogDO">
     insert into stock_log (stock_log_id, item_id, amount,
       status)
     values (#{stockLogId,jdbcType=VARCHAR}, #{itemId,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER},
       #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.ao.cloud.seckill.item.model.dataobject.StockLogDO">
+  <insert id="insertSelective" parameterType="com.ao.cloud.seckill.order.model.dataobject.StockLogDO">
     insert into stock_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="stockLogId != null">
@@ -57,7 +57,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ao.cloud.seckill.item.model.dataobject.StockLogDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ao.cloud.seckill.order.model.dataobject.StockLogDO">
     update stock_log
     <set>
       <if test="itemId != null">
@@ -72,7 +72,7 @@
     </set>
     where stock_log_id = #{stockLogId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ao.cloud.seckill.item.model.dataobject.StockLogDO">
+  <update id="updateByPrimaryKey" parameterType="com.ao.cloud.seckill.order.model.dataobject.StockLogDO">
     update stock_log
     set item_id = #{itemId,jdbcType=INTEGER},
       amount = #{amount,jdbcType=INTEGER},
