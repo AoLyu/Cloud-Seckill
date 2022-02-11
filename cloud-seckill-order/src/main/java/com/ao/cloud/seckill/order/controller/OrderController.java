@@ -5,10 +5,7 @@ import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import com.ao.cloud.seckill.common.response.ApiRestResponse;
 import com.ao.cloud.seckill.common.util.CodeUtil;
 import com.ao.cloud.seckill.order.feign.ItemFeignClient;
-import com.ao.cloud.seckill.order.model.pojo.OrderModel;
 import com.ao.cloud.seckill.order.mq.MqProducer;
-import com.ao.cloud.seckill.order.service.OrderService;
-import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
@@ -27,10 +24,7 @@ import java.util.concurrent.*;
 
 
 @RestController
-@RequestMapping("/order")
 public class OrderController  {
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
@@ -44,14 +38,24 @@ public class OrderController  {
     @Autowired
     private ItemFeignClient itemFeignClient;
 
-    private ExecutorService executorService;
+//    private ExecutorService executorService;
 
-    private RateLimiter orderCreateRateLimiter;
+    private ThreadPoolExecutor threadPoolExecutor;
+
+//    private RateLimiter orderCreateRateLimiter;
 
     @PostConstruct
     public void init(){
-        executorService = Executors.newFixedThreadPool(20);
-        orderCreateRateLimiter = RateLimiter.create(300);
+//        executorService = Executors.newFixedThreadPool(20);
+        BlockingQueue<Runnable> queue = new SynchronousQueue<>();
+        ThreadFactory nameThreadFactory = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r);
+            }
+        };
+        threadPoolExecutor = new ThreadPoolExecutor(20,20,0,TimeUnit.MINUTES,queue,nameThreadFactory);
+//        orderCreateRateLimiter = RateLimiter.create(300);
     }
 
     //生成验证码
@@ -68,9 +72,9 @@ public class OrderController  {
 //            throw new CloudSekillException(CloudSeckillExceptionEnum.USER_NOT_LOGIN.getCode(),"用户还未登陆，不能生成验证码");
 //        }
         //从header中获取uerId;
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String userId = request.getHeader("user_id");
-        String id =httpServletRequest.getHeader("user_id");
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//        String userId = request.getHeader("user_id");
+        String userId =httpServletRequest.getHeader("user_id");
 
         Map<String,Object> map = CodeUtil.generateCodeAndPic();
 
@@ -123,9 +127,9 @@ public class OrderController  {
                                         @RequestParam(name="promoId",required = false)Integer promoId,
                                         @RequestParam(name="promoToken",required = false)String promoToken) throws CloudSekillException {
 
-        if(!orderCreateRateLimiter.tryAcquire()){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.RATELIMIT);
-        }
+//        if(!orderCreateRateLimiter.tryAcquire()){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.RATELIMIT);
+//        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
         //未登录的用户，网关拦截了
@@ -150,7 +154,7 @@ public class OrderController  {
         }
         //同步调用线程池的submit方法
         //拥塞窗口为20的等待队列，用来队列化泄洪
-        Future<Object> future = executorService.submit(new Callable<Object>() {
+        Future<Object> future = threadPoolExecutor.submit(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 //加入库存流水init状态
@@ -170,10 +174,5 @@ public class OrderController  {
             throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR);
         }
         return ApiRestResponse.success(null);
-    }
-
-    @PostMapping("/createorderByFeign")
-    public OrderModel createOrderByFeign(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) {
-        return orderService.createOrder(userId,itemId,promoId,amount,stockLogId);
     }
 }

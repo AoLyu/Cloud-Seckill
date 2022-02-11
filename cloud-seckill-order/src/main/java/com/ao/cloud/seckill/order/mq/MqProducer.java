@@ -95,6 +95,7 @@ public class MqProducer {
     }
 
     //事务型同步库存扣减消息
+    //事务型消息不支持延时消费 setDelayTimeLevel
     public boolean transactionAsyncReduceStock(Integer userId,Integer itemId,Integer promoId,Integer amount,String stockLogId){
         Map<String,Object> bodyMap = new HashMap<>();
         bodyMap.put("itemId",itemId);
