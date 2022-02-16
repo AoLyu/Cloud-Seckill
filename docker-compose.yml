@@ -1,0 +1,71 @@
+version: "3.3"
+
+networks:
+  sec:
+
+volumes:
+  data:
+
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - sec
+
+  zuul:
+    build:
+      context: ./zuul
+      dockerfile: Dockerfile
+    ports:
+      - "8092:8092"
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - sec
+
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    ports:
+      - "8093:8093"
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - sec
+
+  item:
+    build:
+      context: ./item
+      dockerfile: Dockerfile
+    ports:
+      - "8094:8094"
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - sec
+
+  order:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    ports:
+      - "8095:8095"
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - sec
+
+
+

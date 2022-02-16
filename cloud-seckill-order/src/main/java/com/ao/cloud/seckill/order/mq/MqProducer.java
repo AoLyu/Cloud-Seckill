@@ -3,6 +3,7 @@ package com.ao.cloud.seckill.order.mq;
 import com.alibaba.fastjson.JSON;
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import com.ao.cloud.seckill.order.feign.ItemFeignClient;
+import com.ao.cloud.seckill.order.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.order.service.OrderService;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -63,9 +64,9 @@ public class MqProducer {
                 } catch (CloudSekillException e) {
                     e.printStackTrace();
                     //设置对应的stockLog为回滚状态
-                    StockLogDO stockLogDO = itemFeignClient.getStockLogDOByIdByFeign(stockLogId);
+                    StockLogDO stockLogDO = orderService.getStockLogDOById(stockLogId);
                     stockLogDO.setStatus(3);
-                    itemFeignClient.updateStockLogDOByFeign(stockLogDO);
+                    orderService.updateStockLogDO(stockLogDO);
                     return LocalTransactionState.ROLLBACK_MESSAGE;
                 }
                 return LocalTransactionState.COMMIT_MESSAGE;
@@ -79,7 +80,7 @@ public class MqProducer {
                 Integer itemId = (Integer) map.get("itemId");
                 Integer amount = (Integer) map.get("amount");
                 String stockLogId = (String) map.get("stockLogId");
-                StockLogDO stockLogDO = itemFeignClient.getStockLogDOByIdByFeign(stockLogId);
+                StockLogDO stockLogDO = orderService.getStockLogDOById(stockLogId);
                 if(stockLogDO == null){
                     return LocalTransactionState.UNKNOW;
                 }

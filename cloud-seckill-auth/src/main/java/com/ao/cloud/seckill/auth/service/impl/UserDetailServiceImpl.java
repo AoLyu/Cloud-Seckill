@@ -19,9 +19,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     UserService userService;
 
+    //用户名改为手机号验证
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //待完成
+        //使用userService完成用户登录
+
         String password = passwordEncoder.encode("123456");
         return new User("admin", password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+
+//        return null;
     }
 }
