@@ -10,6 +10,7 @@ services:
       ##root账号的密码
       - MYSQL_ROOT_PASSWORD=root123456
       - LANG=C.UTF-8
+      - TZ=Asia/Shanghai  
     image: "docker.io/mysql:latest" 
     container_name: mysql
     restart: always
@@ -39,6 +40,8 @@ services:
     volumes:
       ##数据目录，要确保先创建好
       - /data/redis:/data
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
       rmq:
         aliases:
@@ -53,6 +56,8 @@ services:
     volumes:
       - ./rmq/srv/logs:/opt/logs
       - ./rmq/srv/store:/opt/store
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
         rmq:
           aliases:
@@ -72,6 +77,7 @@ services:
         NAMESRV_ADDR: "rmqnamesrv:9876"
         JAVA_OPTS: " -Duser.home=/opt"
         JAVA_OPT_EXT: "-server -Xms128m -Xmx128m -Xmn128m"
+        TZ: Asia/Shanghai
     command: mqbroker -c /etc/rocketmq/broker.conf
     depends_on:
       - rmqnamesrv
@@ -87,12 +93,30 @@ services:
       - 8090:8080
     environment:
         JAVA_OPTS: "-Drocketmq.namesrv.addr=rmqnamesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+        TZ: Asia/Shanghai
     depends_on:
       - rmqnamesrv
     networks:
       rmq:
         aliases:
           - rmqconsole
+  nginx:
+    image: 'openresty/openresty'
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+        - TZ=Asia/Shanghai
+    volumes:
+      - ./nginx/conf:/usr/local/openresty/nginx/conf
+      - ./nginx/logs:/usr/local/openresty/nginx/logs
+      - ./nginx/vhost:/etc/nginx/conf.d
+      - ./nginx/site:/etc/nginx/site
+    networks:
+      rmq:
+        aliases:
+          - nginx
 networks:
   rmq:
     # name: rmq

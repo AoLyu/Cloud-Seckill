@@ -30,15 +30,16 @@ public class RateLimitFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
 
-        RequestContext requestContext = RequestContext.getCurrentContext();
-        HttpServletRequest request = requestContext.getRequest();
-
-        //只对订单接口限流，进行拦截，就会进入下面的 run方法中
-        if (request.getRequestURI().contains("/createorder")){
-            return true;
-        }
-        //不拦截，放行
-        return false;
+        return false;  // 测试不拦截
+//        RequestContext requestContext = RequestContext.getCurrentContext();
+//        HttpServletRequest request = requestContext.getRequest();
+//
+//        //只对订单接口限流，进行拦截，就会进入下面的 run方法中
+//        if (request.getRequestURI().contains("/createorder")){
+//            return true;
+//        }
+//        //不拦截，放行
+//        return false;
     }
 
     @Override

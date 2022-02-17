@@ -1,0 +1,97 @@
+2022/02/17 20:34:14 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:15 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:15 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:16 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:17 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:19 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:23 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:30 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:34:43 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:35:09 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:36:01 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:37:01 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:38:02 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:09 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:09 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:10 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:11 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:12 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:14 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:17 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:24 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:25 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:25 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:26 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:27 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:29 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:33 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:39 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:39:53 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:40:19 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:11 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:12 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:12 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:13 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:14 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:16 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:19 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:26 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:41:39 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:42:05 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:42:57 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:43:57 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:44:58 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/nginx.conf" failed (2: No such file or directory)
+2022/02/17 20:56:44 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:45 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:45 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:46 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:47 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:49 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:53 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:56:59 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:57:12 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:57:38 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:58:30 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 20:59:30 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:00:31 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:01:31 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:02:32 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:03:32 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:04:32 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:05:33 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:12:59 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:00 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:00 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:01 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:02 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:04 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:08 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:14 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:28 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:13:54 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:14:45 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:15:46 [emerg] 1#1: open() "/usr/local/openresty/nginx/conf/mime.types" failed (2: No such file or directory) in /usr/local/openresty/nginx/conf/nginx.conf:37
+2022/02/17 21:16:47 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:16:47 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:16:48 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:16:49 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:16:50 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:16:52 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:16:55 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:17:02 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:17:15 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:17:41 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:18:33 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:19:33 [emerg] 1#1: unexpected "}" in /usr/local/openresty/nginx/conf/nginx.conf:227
+2022/02/17 21:20:33 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:33 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:34 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:34 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:36 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:37 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:41 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:20:48 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:21:01 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:21:27 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 21:22:18 [emerg] 1#1: getpwnam("nginx") failed in /usr/local/openresty/nginx/conf/nginx.conf:1
+2022/02/17 22:42:36 [error] 8#8: *1 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.174.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "192.168.174.18", referrer: "http://192.168.174.18/"

@@ -7,8 +7,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 @Configuration
 public class RedisConfig {
 
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
+//    @Autowired
+//    private RedisConnectionFactory redisConnectionFactory;
 
     // 使用Redis存储Token，不然Token存在内存中
 //    @Bean

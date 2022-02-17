@@ -13,9 +13,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8091:8091"
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /etc/timezone:/etc/timezone:ro
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
       - sec
 
@@ -25,9 +24,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8092:8092"
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /etc/timezone:/etc/timezone:ro
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
       - sec
 
@@ -37,9 +35,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8093:8093"
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /etc/timezone:/etc/timezone:ro
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
       - sec
 
@@ -49,9 +46,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8094:8094"
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /etc/timezone:/etc/timezone:ro
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
       - sec
 
@@ -61,9 +57,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8095:8095"
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /etc/timezone:/etc/timezone:ro
+    environment:  
+      - TZ=Asia/Shanghai 
     networks:
       - sec
 

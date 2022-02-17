@@ -31,11 +31,8 @@ public class UserFilter extends ZuulFilter {
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
         String requestURI = request.getRequestURI();
-        if(requestURI.contains("images") || requestURI.contains("pay")|| requestURI.contains("auth"))
-            return false;
-        if(requestURI.contains("cart")||requestURI.contains("order")||requestURI.contains("item"))
+        if(requestURI.contains("order"))
             return true;
-
         return false;
     }
 
@@ -43,14 +40,13 @@ public class UserFilter extends ZuulFilter {
     public Object run() throws ZuulException {
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
-
+        currentContext.getResponse().setContentType("application/json;charset=utf-8");
         String header = request.getHeader("Authorization");
-
         if(StringUtils.isBlank(header)) {
             currentContext.setSendZuulResponse(false);
             currentContext.setResponseBody("{\n" +
                     "    \"status\": 10006,\n" +
-                    "    \"msg\": \"NEED_LOGIN\",\n" +
+                    "    \"msg\": \"请先登录\",\n" +
                     "    \"data\": null\n" +
                     "}");
         } else {
