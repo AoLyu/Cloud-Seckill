@@ -1,7 +1,0 @@
-com\ao\cloud\seckill\zuul\component\CustomAccessDeniedHandler.class
-com\ao\cloud\seckill\zuul\filter\RateLimitFilter.class
-com\ao\cloud\seckill\zuul\ZuulGatewayApplication.class
-com\ao\cloud\seckill\zuul\config\ResourceServerConfig.class
-com\ao\cloud\seckill\zuul\filter\UserFilter.class
-com\ao\cloud\seckill\zuul\component\AuthExceptionEntryPoint.class
-com\ao\cloud\seckill\zuul\config\ZuuklCorsConfig.class
