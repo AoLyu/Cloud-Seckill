@@ -23,13 +23,13 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint
         Throwable cause = authException.getCause();
 
         response.setStatus(HttpStatus.OK.value());
-        response.setHeader("Content-Type", "application/json;charset=UTF-8");
+        response.setContentType("application/json;charset=utf-8");;
         try {
             if(cause instanceof InvalidTokenException) {
                 response.getWriter().write(
-                        "    \"status\": 10009,\n" +
+                        " {   \"status\": 10009,\n" +
                                 "    \"msg\": \"凭证无效或已过期\",\n" +
-                                "    \"data\": null"
+                                "    \"data\": null}"
                 );
             }else{
                 response.getWriter().write(

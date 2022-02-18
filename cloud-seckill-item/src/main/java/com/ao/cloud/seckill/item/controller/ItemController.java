@@ -12,6 +12,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -88,30 +89,6 @@ public class ItemController  {
 
         return ApiRestResponse.success(itemVO);
 
-
-//        //先取本地缓存
-//        itemModel = (ItemModel) cacheService.getFromCommonCache("item_"+id);
-//
-//        if(itemModel == null){
-//            //根据商品的id到redis内获取
-//            itemModel = (ItemModel) redisTemplate.opsForValue().get("item_"+id);
-//
-//            //若redis内不存在对应的itemModel,则访问下游service
-//            if(itemModel == null){
-//                itemModel = itemService.getItemById(id);
-//                //设置itemModel到redis内
-//                redisTemplate.opsForValue().set("item_"+id,itemModel);
-//                redisTemplate.expire("item_"+id,10, TimeUnit.MINUTES);
-//            }
-//            //填充本地缓存  guava不能存null
-//            if(itemModel!=null)
-//                cacheService.setCommonCache("item_"+id,itemModel);
-//        }
-//        if(itemModel==null)
-//            return ApiRestResponse.error(CloudSeckillExceptionEnum.STOCK_NOT_ENOUGH.getCode(),"商品不存在");
-//        ItemVO itemVO = convertVOFromModel(itemModel);
-//
-//        return ApiRestResponse.success(itemVO);
     }
 
     //商品详情页浏览
@@ -174,12 +151,10 @@ public class ItemController  {
         return itemVO;
     }
 
-    @PostMapping("generateSecondKillTokenByFeign")
-    public String generateSecondKillTokenByFeign(Integer promoId,Integer itemId){
-
-        String userId = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
-                .getHeader("user_id");
-        return promoService.generateSecondKillToken(promoId,itemId,userId);
+    @PostMapping("/validateByFeign")
+    public ApiRestResponse<Boolean> validateFeign(@RequestParam("promoId") Integer promoId,@RequestParam("itemId") Integer itemId){
+        Boolean result = promoService.validate(promoId,itemId);
+        return ApiRestResponse.success(result);
     }
 
 }

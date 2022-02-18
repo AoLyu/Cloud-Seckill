@@ -31,8 +31,10 @@ public class UserFilter extends ZuulFilter {
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
         String requestURI = request.getRequestURI();
-        if(requestURI.contains("order"))
+
+        if(requestURI.contains("order")||requestURI.contains("/item/generateSecondKillToken"))
             return true;
+
         return false;
     }
 
@@ -40,13 +42,15 @@ public class UserFilter extends ZuulFilter {
     public Object run() throws ZuulException {
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
-        currentContext.getResponse().setContentType("application/json;charset=utf-8");
+
         String header = request.getHeader("Authorization");
+
         if(StringUtils.isBlank(header)) {
+            currentContext.getResponse().setContentType("application/json;charset=utf-8");
             currentContext.setSendZuulResponse(false);
             currentContext.setResponseBody("{\n" +
                     "    \"status\": 10006,\n" +
-                    "    \"msg\": \"请先登录\",\n" +
+                    "    \"msg\": \"NEED_LOGIN\",\n" +
                     "    \"data\": null\n" +
                     "}");
         } else {

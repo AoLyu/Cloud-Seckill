@@ -29,8 +29,8 @@ public class RateLimitFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        return false;
 
-        return false;  // 测试不拦截
 //        RequestContext requestContext = RequestContext.getCurrentContext();
 //        HttpServletRequest request = requestContext.getRequest();
 //
@@ -45,6 +45,7 @@ public class RateLimitFilter extends ZuulFilter {
     @Override
     public Object run() throws ZuulException {
         RequestContext currentContext = RequestContext.getCurrentContext();
+        currentContext.getResponse().setContentType("application/json;charset=utf-8");
         if(!RATELIMITER.tryAcquire()){//判断是否取到令牌
             //没有取到令牌 直接抛出异常
 //            throw new RateLimterException();

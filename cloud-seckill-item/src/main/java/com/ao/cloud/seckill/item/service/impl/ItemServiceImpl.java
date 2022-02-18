@@ -131,7 +131,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public boolean decreaseStock(Integer itemId, Integer amount) throws CloudSekillException {
         //int affectedRow =  itemStockDOMapper.decreaseStock(itemId,amount);
-        long result = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue() * -1);
+        long result = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue() *  -1);
         if(result >0){
             //更新库存成功
             return true;

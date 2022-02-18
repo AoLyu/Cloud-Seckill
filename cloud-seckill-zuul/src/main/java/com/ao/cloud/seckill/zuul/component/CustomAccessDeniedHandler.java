@@ -18,13 +18,13 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
         response.setStatus(HttpStatus.OK.value());
-//        response.setHeader("Content-Type", "application/json;charset=UTF-8");
         response.setContentType("application/json;charset=utf-8");
+
         try {
             response.getWriter().write(
                     "{    \"status\": 10009,\n" +
-                            "    \"msg\": \"拒绝访问\",\n" +
-                            "    \"data\": null" +
+                    "    \"msg\": \"拒绝访问\",\n" +
+                    "    \"data\": null"+
                             "}"
             );
         } catch (IOException e) {

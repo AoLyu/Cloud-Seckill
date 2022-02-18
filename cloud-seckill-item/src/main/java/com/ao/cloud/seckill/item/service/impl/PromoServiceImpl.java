@@ -6,6 +6,7 @@ import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.item.model.pojo.PromoModel;
 import com.ao.cloud.seckill.item.service.ItemService;
 import com.ao.cloud.seckill.item.service.PromoService;
+import io.swagger.models.auth.In;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,23 +62,21 @@ public class PromoServiceImpl implements PromoService {
         redisTemplate.opsForValue().set("promo_item_stock_"+itemModel.getId(), itemModel.getStock());
 
         //将大闸的限制数字设到redis内
-        redisTemplate.opsForValue().set("promo_door_count_"+promoId,itemModel.getStock().intValue() * 5);
+        redisTemplate.opsForValue().set("promo_door_count_"+promoId,itemModel.getStock() * 5);
 
     }
 
     @Override
-    public String generateSecondKillToken(Integer promoId,Integer itemId,String userId) {
-
+    public Boolean validate(Integer promoId, Integer itemId) {
         //判断是否库存已售罄，若对应的售罄key存在，则直接返回下单失败
         if(redisTemplate.hasKey("promo_item_stock_invalid_"+itemId)){
-            return null;
+            return false;
         }
-        PromoDO promoDO = promoDOMapper.selectByPrimaryKey(promoId);
 
-        //dataobject->model
-        PromoModel promoModel = convertFromDataObject(promoDO);
+        //秒杀是否存在
+        PromoModel promoModel = this.getPromoModelByIdInCache(promoId);
         if(promoModel == null){
-            return null;
+            return false;
         }
 
         //判断当前时间是否秒杀活动即将开始或正在进行
@@ -90,28 +89,31 @@ public class PromoServiceImpl implements PromoService {
         }
         //判断活动是否正在进行
         if(promoModel.getStatus().intValue() != 2){
-            return null;
+            return false;
         }
         //判断item信息是否存在
         ItemModel itemModel = itemService.getItemByIdInCache(itemId);
         if(itemModel == null){
-            return null;
+            return false;
         }
-        //判断用户信息是否存在
-//        UserModel userModel = userFeignClient.getUserByIdInCacheByFeign(userId);
-//        if(userModel == null){
-//            return null;
-//        }
-        //获取秒杀大闸的count数量
-        long result = redisTemplate.opsForValue().increment("promo_door_count_"+promoId,-1);
-        if(result < 0){
-            return null;
+        return true;
+    }
+
+    @Override
+    public PromoModel getPromoModelByIdInCache(Integer promoId) {
+        PromoModel promoModel = (PromoModel) redisTemplate.opsForValue().get("promo_validate_"+promoId);
+        if(promoModel == null){
+            PromoDO promoDO = promoDOMapper.selectByPrimaryKey(promoId);
+            //dataobject->model
+            promoModel = convertFromDataObject(promoDO);
+            if(promoModel == null){
+                return null;
+            } else {
+                redisTemplate.opsForValue().set("promo_validate_" + promoId, promoModel);
+                redisTemplate.expire("promo_validate_" + promoId, 10, TimeUnit.MINUTES);
+            }
         }
-        //生成token并且存入redis内并给一个5分钟的有效期
-        String token = UUID.randomUUID().toString().replace("-","");
-        redisTemplate.opsForValue().set("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId,token);
-        redisTemplate.expire("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId,5, TimeUnit.MINUTES);
-        return token;
+        return promoModel;
     }
 
     private PromoModel convertFromDataObject(PromoDO promoDO){
