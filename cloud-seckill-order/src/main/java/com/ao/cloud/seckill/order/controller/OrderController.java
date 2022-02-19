@@ -74,14 +74,11 @@ public class OrderController  {
         if(redisCodeObj!=null)
             redisVerifyCode =redisCodeObj.toString();
         if(StringUtils.isEmpty(redisVerifyCode)){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"请求非法，验证码错误");
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"验证码错误");
         }
         if(!redisVerifyCode.equalsIgnoreCase(verifyCode)){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"请求非法，验证码错误");
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"验证码错误");
         }
-
-        Boolean a = true;
-        boolean b = a==true;
 
         Object res = itemFeignClient.validateByFeign( itemId, promoId).getData();
 
@@ -142,8 +139,9 @@ public class OrderController  {
                 throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"秒杀令牌校验失败");
             }
         }
-        //同步调用线程池的submit方法
-        //拥塞窗口为20的等待队列，用来队列化泄洪
+
+//        同步调用线程池的submit方法
+//        拥塞窗口为20的等待队列，用来队列化泄洪
         Future<Object> future = threadPoolExecutor.submit(new Callable<Object>() {
             @Override
             public Object call() throws Exception {

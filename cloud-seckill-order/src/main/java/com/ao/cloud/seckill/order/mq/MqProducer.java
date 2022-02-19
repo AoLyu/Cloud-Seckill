@@ -2,7 +2,6 @@ package com.ao.cloud.seckill.order.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
-import com.ao.cloud.seckill.order.feign.ItemFeignClient;
 import com.ao.cloud.seckill.order.model.dataobject.StockLogDO;
 import com.ao.cloud.seckill.order.service.OrderService;
 import org.apache.rocketmq.client.exception.MQBrokerException;

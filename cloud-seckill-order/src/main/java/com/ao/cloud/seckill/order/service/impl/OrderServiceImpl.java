@@ -33,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SequenceDOMapper sequenceDOMapper;
 
+    @Autowired
     private StockLogDOMapper stockLogDOMapper;
 
     @Autowired
@@ -159,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
         stockLogDO.setAmount(amount);
         stockLogDO.setStockLogId(UUID.randomUUID().toString().replace("-",""));
         stockLogDO.setStatus(1);
-        stockLogDOMapper.insertSelective(stockLogDO);
+        int res = stockLogDOMapper.insertSelective(stockLogDO);
         return stockLogDO.getStockLogId();
     }
 

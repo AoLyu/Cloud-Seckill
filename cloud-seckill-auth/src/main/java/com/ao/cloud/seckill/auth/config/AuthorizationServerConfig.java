@@ -81,7 +81,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 //配置client-secret 客户端密码(开发者账号id对应的密码)
                 .secret(passwordEncoder.encode("112233"))
                 //配置访问token的有效期
-                .accessTokenValiditySeconds(3600)
+                .accessTokenValiditySeconds(3600*24)
                 //配置刷新token的有效期
                 .refreshTokenValiditySeconds(86400)
                 //配置redirect_uri,用于授权成功后跳转

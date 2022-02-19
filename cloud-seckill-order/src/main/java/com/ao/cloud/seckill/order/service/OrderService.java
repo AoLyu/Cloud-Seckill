@@ -12,7 +12,6 @@ public interface OrderService {
     OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws CloudSekillException;
 
     //初始化对应的库存流水
-    @Transactional
     String initStockLog(Integer itemId, Integer amount);
 
     StockLogDO getStockLogDOById(String stockLogId);

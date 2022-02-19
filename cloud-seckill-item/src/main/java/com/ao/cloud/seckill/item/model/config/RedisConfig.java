@@ -1,4 +1,4 @@
-package com.ao.cloud.seckill.auth.config;
+package com.ao.cloud.seckill.item.model.config;
 
 import com.ao.cloud.seckill.common.serializer.JodaDateTimeJsonDeserializer;
 import com.ao.cloud.seckill.common.serializer.JodaDateTimeJsonSerializer;

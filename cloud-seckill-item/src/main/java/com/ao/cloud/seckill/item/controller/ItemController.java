@@ -153,7 +153,7 @@ public class ItemController  {
 
     @PostMapping("/validateByFeign")
     public ApiRestResponse<Boolean> validateFeign(@RequestParam("itemId") Integer itemId,@RequestParam("promoId") Integer promoId){
-        Boolean result = promoService.validate(promoId,itemId);
+        Boolean result = promoService.validate(itemId,promoId);
         return ApiRestResponse.success(result);
     }
 
