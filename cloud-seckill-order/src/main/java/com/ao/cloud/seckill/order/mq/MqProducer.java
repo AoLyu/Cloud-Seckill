@@ -36,9 +36,6 @@ public class MqProducer {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private ItemFeignClient itemFeignClient;
-
     @PostConstruct
     public void init() throws MQClientException {
         //做mq producer的初始化
@@ -96,7 +93,7 @@ public class MqProducer {
 
     //事务型同步库存扣减消息
     //事务型消息不支持延时消费 setDelayTimeLevel
-    public boolean transactionAsyncReduceStock(Integer userId,Integer itemId,Integer amount,String stockLogId){
+    public boolean transactionAsyncReduceStock(Integer userId,Integer itemId,Integer amount,Integer promoId,String stockLogId){
         Map<String,Object> bodyMap = new HashMap<>();
         bodyMap.put("itemId",itemId);
         bodyMap.put("amount",amount);
@@ -106,7 +103,7 @@ public class MqProducer {
         argsMap.put("itemId",itemId);
         argsMap.put("amount",amount);
         argsMap.put("userId",userId);
-//        argsMap.put("promoId",promoId);
+        argsMap.put("promoId",promoId);
         argsMap.put("stockLogId",stockLogId);
 
         Message message = new Message(topicName,"increase",

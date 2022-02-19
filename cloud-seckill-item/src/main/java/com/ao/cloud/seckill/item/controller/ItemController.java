@@ -152,9 +152,15 @@ public class ItemController  {
     }
 
     @PostMapping("/validateByFeign")
-    public ApiRestResponse<Boolean> validateFeign(@RequestParam("promoId") Integer promoId,@RequestParam("itemId") Integer itemId){
+    public ApiRestResponse<Boolean> validateFeign(@RequestParam("itemId") Integer itemId,@RequestParam("promoId") Integer promoId){
         Boolean result = promoService.validate(promoId,itemId);
         return ApiRestResponse.success(result);
     }
+
+    @PostMapping("/getItemPriceByFeign")
+    ApiRestResponse<BigDecimal> getCurrentPriceByItemIdByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("promoId") Integer promoId){
+        BigDecimal currentPrice = promoService.getItemCurrentPrice(itemId,promoId);
+        return ApiRestResponse.success(currentPrice);
+    };
 
 }

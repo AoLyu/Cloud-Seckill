@@ -18,4 +18,8 @@ public interface OrderService {
     StockLogDO getStockLogDOById(String stockLogId);
 
     int updateStockLogDO(StockLogDO record);
+
+    boolean increaseStock(Integer itemId, Integer amount);
+
+    boolean decreaseStock(Integer itemId, Integer amount);
 }

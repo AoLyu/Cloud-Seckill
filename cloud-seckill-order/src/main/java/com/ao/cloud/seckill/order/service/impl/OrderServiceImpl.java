@@ -3,7 +3,6 @@ package com.ao.cloud.seckill.order.service.impl;
 
 import com.ao.cloud.seckill.common.exception.CloudSeckillExceptionEnum;
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
-import com.ao.cloud.seckill.item.model.pojo.ItemModel;
 import com.ao.cloud.seckill.order.feign.ItemFeignClient;
 import com.ao.cloud.seckill.order.model.dao.OrderDOMapper;
 import com.ao.cloud.seckill.order.model.dao.SequenceDOMapper;
@@ -16,6 +15,7 @@ import com.ao.cloud.seckill.order.mq.MqProducer;
 import com.ao.cloud.seckill.order.service.OrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,36 +44,37 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDOMapper orderDOMapper;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     @Transactional
     public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws CloudSekillException {
         //1.校验下单状态,下单的商品是否存在，用户是否合法，购买数量是否正确
         //ItemModel itemModel = itemService.getItemById(itemId);
-        ItemModel itemModel = itemFeignClient.getItemByIdInCacheByFeign(itemId);
-        if(itemModel == null){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"商品信息不存在");
+        // Feign远程获取物品当前价格。
+        Object currentPrice = itemFeignClient.getCurrentPriceByItemIdByFeign(itemId,promoId).getData();
+        if(!(currentPrice instanceof BigDecimal)) {
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"订单创建失败");
         }
 
         if(amount <= 0 || amount > 99){
             throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"数量信息不正确");
         }
+        //2.落单减库存（从Redis里面减） // 数量不够就抛异常
+        boolean result = this.decreaseStock(itemId,amount);
 
-        //2.落单减库存    // 使用RocketMq异步扣减
-//        boolean result = itemFeignClient.decreaseStockByFeign(itemId,amount);
-//        if(!result){
-//            throw new CloudSekillException(CloudSeckillExceptionEnum.STOCK_NOT_ENOUGH);
-//        }
+        if(!result) {
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"商品已抢购完");
+        }
 
         //3.订单入库
         OrderModel orderModel = new OrderModel();
         orderModel.setUserId(userId);
         orderModel.setItemId(itemId);
         orderModel.setAmount(amount);
-        if(promoId != null){
-            orderModel.setItemPrice(itemModel.getPromoModel().getPromoItemPrice());
-        }else{
-            orderModel.setItemPrice(itemModel.getPrice());
-        }
+
+        orderModel.setItemPrice((BigDecimal) currentPrice);
         orderModel.setPromoId(promoId);
         orderModel.setOrderPrice(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
 
@@ -81,9 +82,6 @@ public class OrderServiceImpl implements OrderService {
         orderModel.setId(generateOrderNo());
         OrderDO orderDO = convertFromOrderModel(orderModel);
         orderDOMapper.insertSelective(orderDO);
-
-        //加上商品的销量  , 异步扣减的时候更新销量
-//        itemFeignClient.increaseSalesByFeign(itemId,amount);
 
         //设置库存流水状态为成功
         StockLogDO stockLogDO = stockLogDOMapper.selectByPrimaryKey(stockLogId);
@@ -93,18 +91,19 @@ public class OrderServiceImpl implements OrderService {
         stockLogDO.setStatus(2);
         stockLogDOMapper.updateByPrimaryKeySelective(stockLogDO);
 
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
-                @Override
-                public void afterCommit(){
-                    //异步更新库存
-                    boolean mqResult =  mqProducer.asyncReduceStock(itemId,amount);
-//                    if(!mqResult){
-//                        itemService.increaseStock(itemId,amount);
-//                        throw new BusinessException(EmBusinessError.MQ_SEND_FAIL);
-//                    }
-                }
-
-        });
+        //使用了事务型消息不再发送普通消息
+//        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+//                @Override
+//                public void afterCommit(){
+//                    //异步更新库存
+//                    boolean mqResult =  mqProducer.asyncReduceStock(itemId,amount);
+////                    if(!mqResult){
+////                        itemService.increaseStock(itemId,amount);
+////                        throw new BusinessException(EmBusinessError.MQ_SEND_FAIL);
+////                    }
+//                }
+//
+//        });
 
         //4.返回前端
         return orderModel;
@@ -162,6 +161,33 @@ public class OrderServiceImpl implements OrderService {
         stockLogDO.setStatus(1);
         stockLogDOMapper.insertSelective(stockLogDO);
         return stockLogDO.getStockLogId();
+    }
+
+    @Override
+    public boolean decreaseStock(Integer itemId, Integer amount) {
+        //int affectedRow =  itemStockDOMapper.decreaseStock(itemId,amount);
+        long result = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue() * -1);
+        if(result >0){
+            //更新库存成功
+            return true;
+        }else if(result == 0){
+            //打上库存已售罄的标识
+            redisTemplate.opsForValue().set("promo_item_stock_invalid_"+itemId,"true");
+
+            //更新库存成功
+            return true;
+        }else{
+            //更新库存失败
+            increaseStock(itemId,amount);
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean increaseStock(Integer itemId, Integer amount) {
+        redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue());
+        return true;
     }
 
 

@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.PublicKey;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -67,7 +68,7 @@ public class PromoServiceImpl implements PromoService {
     }
 
     @Override
-    public Boolean validate(Integer promoId, Integer itemId) {
+    public Boolean validate(Integer itemId,Integer promoId) {
         //判断是否库存已售罄，若对应的售罄key存在，则直接返回下单失败
         if(redisTemplate.hasKey("promo_item_stock_invalid_"+itemId)){
             return false;
@@ -97,6 +98,17 @@ public class PromoServiceImpl implements PromoService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public BigDecimal getItemCurrentPrice(Integer itemId, Integer promoId) {
+        //秒杀价
+        if(promoId != null){
+            return itemService.getItemByIdInCache(itemId).getPromoModel().getPromoItemPrice();
+         //原价
+        }else{
+            return itemService.getItemByIdInCache(itemId).getPrice();
+        }
     }
 
     @Override

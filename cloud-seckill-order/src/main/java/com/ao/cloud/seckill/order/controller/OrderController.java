@@ -83,7 +83,7 @@ public class OrderController  {
         Boolean a = true;
         boolean b = a==true;
 
-        Object res = itemFeignClient.validateByFeign(promoId, itemId).getData();
+        Object res = itemFeignClient.validateByFeign( itemId, promoId).getData();
 
         if(!(res instanceof Boolean && ((Boolean) res).booleanValue()==true)) {
             throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"生成令牌失败");
@@ -132,7 +132,6 @@ public class OrderController  {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
 
-        // 网关使用令牌桶发放令牌
         //校验秒杀令牌是否正确
         if(promoId != null){
             String inRedisPromoToken = (String) redisTemplate.opsForValue().get("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId);
@@ -151,7 +150,7 @@ public class OrderController  {
                 //加入库存流水init状态
                 String stockLogId = orderService.initStockLog(itemId,amount);
                 //再去完成对应的下单事务型消息机制
-                if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,amount,stockLogId)){
+                if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,amount,promoId,stockLogId)){
                     throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
                 }
                 return null;
@@ -160,9 +159,9 @@ public class OrderController  {
         try {
             future.get();
         } catch (InterruptedException e) {
-            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR);
+            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
         } catch (ExecutionException e) {
-            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR);
+            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
         }
         return ApiRestResponse.success(null);
     }
