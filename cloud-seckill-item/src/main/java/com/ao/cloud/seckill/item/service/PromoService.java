@@ -14,6 +14,8 @@ public interface PromoService {
 
     Boolean validate(Integer promoId, Integer itemId);
 
+    BigDecimal decreaseStock(Integer itemId, Integer promoId, Integer amount);
+
     BigDecimal getItemCurrentPrice(Integer itemId, Integer promoId);
 
     PromoModel getPromoModelByIdInCache(Integer id);

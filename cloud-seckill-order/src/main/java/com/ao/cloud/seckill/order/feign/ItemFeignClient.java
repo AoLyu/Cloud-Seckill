@@ -15,4 +15,7 @@ public interface ItemFeignClient {
 
     @PostMapping("/getItemPriceByFeign")
     ApiRestResponse<BigDecimal> getCurrentPriceByItemIdByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("promoId") Integer promoId);
+
+    @PostMapping("/decreaseStockByFeign")
+    ApiRestResponse<BigDecimal> decreaseStockByItemIdByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("promoId") Integer promoId,@RequestParam("amount") Integer amount);
 }

@@ -5,6 +5,7 @@ import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import com.ao.cloud.seckill.common.response.ApiRestResponse;
 import com.ao.cloud.seckill.common.util.CodeUtil;
 import com.ao.cloud.seckill.order.feign.ItemFeignClient;
+import com.ao.cloud.seckill.order.model.pojo.OrderModel;
 import com.ao.cloud.seckill.order.mq.MqProducer;
 import com.ao.cloud.seckill.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class OrderController  {
     @PostConstruct
     public void init(){
 //        executorService = Executors.newFixedThreadPool(20);
-        BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(100);
+        BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(500);
         ThreadFactory nameThreadFactory = new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
@@ -128,18 +129,26 @@ public class OrderController  {
 //        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
-
+        //判断是否库存已售罄，若对应的售罄key存在，则直接返回下单失败
+        if(redisTemplate.hasKey("promo_item_stock_invalid_"+itemId)){
+            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"商品已抢完，下单失败");
+        }
         //校验秒杀令牌是否正确
         if(promoId != null){
             String inRedisPromoToken = (String) redisTemplate.opsForValue().get("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId);
             if(inRedisPromoToken == null){
-                throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"秒杀令牌校验失败");
+                throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"秒杀令牌校验失败,请获取");
             }
             if(!org.apache.commons.lang3.StringUtils.equals(promoToken,inRedisPromoToken)){
-                throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"秒杀令牌校验失败");
+                throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"秒杀令牌校验失败，请获取");
             }
         }
-
+//        //加入库存流水init状态
+//        String stockLogId = orderService.initStockLog(itemId,amount);
+//        //再去完成对应的下单事务型消息机制
+//        if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,amount,promoId,stockLogId)){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
+//        }
 //        同步调用线程池的submit方法
 //        拥塞窗口为20的等待队列，用来队列化泄洪
         Future<Object> future = threadPoolExecutor.submit(new Callable<Object>() {
@@ -163,4 +172,23 @@ public class OrderController  {
         }
         return ApiRestResponse.success(null);
     }
+
+    //封装下单请求
+    @PostMapping(value = "/createorderold")
+    public ApiRestResponse createOrderOld(@RequestParam(name="itemId")Integer itemId,
+                                       @RequestParam(name="amount")Integer amount,
+                                       @RequestParam(name="promoId")Integer promoId,
+                                       @RequestParam(name="promoToken")String promoToken
+    ) throws CloudSekillException {
+
+//        if(!orderCreateRateLimiter.tryAcquire()){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.RATELIMIT);
+//        }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String userId = request.getHeader("user_id");
+
+        OrderModel orderOld = orderService.createOrderOld(Integer.parseInt(userId),itemId,promoId,amount);
+        return ApiRestResponse.success(orderOld);
+    }
+
 }

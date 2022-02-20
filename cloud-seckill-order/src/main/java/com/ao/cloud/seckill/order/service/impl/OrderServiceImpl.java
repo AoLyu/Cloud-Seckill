@@ -50,6 +50,34 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    public OrderModel createOrderOld(Integer userId, Integer itemId, Integer promoId, Integer amount) throws CloudSekillException {
+        //1.校验下单状态,下单的商品是否存在，用户是否合法，购买数量是否正确
+        // Feign调用物品服务扣减库存并返回当前价格，如果扣减不成功，返回null。
+        Object currentPrice = itemFeignClient.decreaseStockByItemIdByFeign(itemId,promoId,amount).getData();
+        if(!(currentPrice instanceof BigDecimal)) {
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"订单创建失败");
+        }
+        //3.订单入库
+        OrderModel orderModel = new OrderModel();
+        orderModel.setUserId(userId);
+        orderModel.setItemId(itemId);
+        orderModel.setAmount(amount);
+
+        orderModel.setItemPrice((BigDecimal) currentPrice);
+        orderModel.setPromoId(promoId);
+        orderModel.setOrderPrice(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
+
+        //生成交易流水号,订单号
+        orderModel.setId(generateOrderNo());
+        OrderDO orderDO = convertFromOrderModel(orderModel);
+        orderDOMapper.insertSelective(orderDO);
+
+        //4.返回前端
+        return orderModel;
+    }
+
+    @Override
+    @Transactional
     public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws CloudSekillException {
         //1.校验下单状态,下单的商品是否存在，用户是否合法，购买数量是否正确
         //ItemModel itemModel = itemService.getItemById(itemId);

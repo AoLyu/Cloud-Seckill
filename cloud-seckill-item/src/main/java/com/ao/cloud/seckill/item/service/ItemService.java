@@ -3,6 +3,7 @@ package com.ao.cloud.seckill.item.service;
 
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import com.ao.cloud.seckill.item.model.pojo.ItemModel;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,8 +22,15 @@ public interface ItemService {
     //item及promo model缓存模型
     ItemModel getItemByIdInCache(Integer id);
 
+    //查询库存
+    int getStock(Integer itemId);
+
+    @Transactional
+    void decreaseStockOld(Integer itemId, Integer amount) throws CloudSekillException;
+
     //库存扣减
     boolean decreaseStock(Integer itemId,Integer amount)throws CloudSekillException;
+
     //库存回补
     boolean increaseStock(Integer itemId,Integer amount)throws CloudSekillException;
 

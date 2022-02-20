@@ -162,5 +162,9 @@ public class ItemController  {
         BigDecimal currentPrice = promoService.getItemCurrentPrice(itemId,promoId);
         return ApiRestResponse.success(currentPrice);
     };
-
+    @PostMapping("/decreaseStockByFeign")
+    ApiRestResponse<BigDecimal> decreaseStockByItemIdByFeign(@RequestParam("itemId") Integer itemId,@RequestParam("promoId") Integer promoId,@RequestParam("amount") Integer amount){
+        BigDecimal currentPrice = promoService.decreaseStock(itemId,promoId,amount);
+        return ApiRestResponse.success(currentPrice);
+    }
 }

@@ -97,6 +97,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public int getStock(Integer itemId) {
+        ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemId);
+        return itemStockDO.getStock();
+    }
+
+
+    @Override
     public ItemModel getItemById(Integer id) {
         ItemDO itemDO = itemDOMapper.selectByPrimaryKey(id);
         if(itemDO == null){
@@ -129,6 +136,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
+    public void decreaseStockOld(Integer itemId, Integer amount) throws CloudSekillException {
+        int affectedRow =  itemStockDOMapper.decreaseStock(itemId,amount);
+    }
+
+    @Override
+    @Transactional
     public boolean decreaseStock(Integer itemId, Integer amount) throws CloudSekillException {
         //int affectedRow =  itemStockDOMapper.decreaseStock(itemId,amount);
         long result = redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue() *  -1);
@@ -146,7 +159,6 @@ public class ItemServiceImpl implements ItemService {
             increaseStock(itemId,amount);
             return false;
         }
-
     }
 
     @Override
