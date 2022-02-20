@@ -51,7 +51,18 @@ public class UserServiceImpl implements UserService {
         return convertFromDataObject(userDO,userPasswordDO);
     }
 
+    @Override
+    public UserModel getUserByName(String userName) {
+        //调用userdomapper获取到对应的用户dataobject
+        UserDO userDO = userDOMapper.selectByUserName(userName);
+        if(userDO == null){
+            return null;
+        }
+        //通过用户id获取对应的用户加密密码信息
+        UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserId(userDO.getId());
 
+        return convertFromDataObject(userDO,userPasswordDO);
+    }
 
     @Override
     public UserModel getUserByIdInCache(Integer id) {
@@ -75,6 +86,9 @@ public class UserServiceImpl implements UserService {
         if(result.isHasErrors()){
             throw new CloudSekillException(CloudSeckillExceptionEnum.REQUEST_PARAM_ERROR.getCode(),result.getErrMsg());
         }
+        UserDO userDOTest = userDOMapper.selectByUserName(userModel.getName());
+        if(userDOTest!=null)
+            throw  new CloudSekillException(CloudSeckillExceptionEnum.USER_EXISTED);
         //实现model->dataobject方法
         UserDO userDO = convertFromModel(userModel);
         try{

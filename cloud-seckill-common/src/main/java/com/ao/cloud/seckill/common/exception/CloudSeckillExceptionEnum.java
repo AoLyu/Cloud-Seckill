@@ -17,6 +17,8 @@ public enum CloudSeckillExceptionEnum {
     AUTHENTICATION_ERROR(10009,"认证错误"),
     GATEWAY_ERROR(10010,"网关错误"),
     REQUEST_ERROR(10011,"请求错误"),
+    PASSWORD_ERROR(10012,"密码错误"),
+    USER_EXISTED(10013,"用户名不可用"),
     SYSTEM_ERROR(20000,"系统异常");
 
 

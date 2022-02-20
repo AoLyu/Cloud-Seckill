@@ -9,6 +9,9 @@ public interface UserService {
     //通过用户ID获取用户对象的方法
     UserModel getUserById(Integer id);
 
+    //防重名
+    UserModel getUserByName(String userName);
+
     //通过缓存获取用户对象
     UserModel getUserByIdInCache(Integer id);
 

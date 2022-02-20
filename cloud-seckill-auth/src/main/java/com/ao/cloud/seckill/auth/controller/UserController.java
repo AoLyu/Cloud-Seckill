@@ -111,28 +111,29 @@ public class UserController{
         return userVO;
     }
 
-    //用户登陆接口
-    @PostMapping(value = "/login")
-    public ApiRestResponse login(@RequestParam(name="telephone")String telephone,
-                                  @RequestParam(name="password")String password) throws CloudSekillException, UnsupportedEncodingException, NoSuchAlgorithmException {
-        //入参校验
-        if(StringUtils.isBlank(telephone)||
-                StringUtils.isBlank(password)){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR);
-        }
-        //用户登陆服务,用来校验用户登陆是否合法
-        UserModel userModel = userService.validateLogin(telephone,MD5Utils.getMDStr(password));
-
-        //生成登录凭证token，UUID
-        String uuidToken = UUID.randomUUID().toString();
-        uuidToken = uuidToken.replace("-","");
-        //建议token和用户登陆态之间的联系
-        redisTemplate.opsForValue().set(uuidToken,userModel);
-        redisTemplate.expire(uuidToken,1, TimeUnit.HOURS);
-
-        //下发了token
-        return ApiRestResponse.success(uuidToken);
-    }
+//    //改接口已更换为获取Token接口
+//    //用户登陆接口
+//    @PostMapping(value = "/login")
+//    public ApiRestResponse login(@RequestParam(name="telephone")String telephone,
+//                                  @RequestParam(name="password")String password) throws CloudSekillException, UnsupportedEncodingException, NoSuchAlgorithmException {
+//        //入参校验
+//        if(StringUtils.isBlank(telephone)||
+//                StringUtils.isBlank(password)){
+//            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR);
+//        }
+//        //用户登陆服务,用来校验用户登陆是否合法
+//        UserModel userModel = userService.validateLogin(telephone,MD5Utils.getMDStr(password));
+//
+//        //生成登录凭证token，UUID
+//        String uuidToken = UUID.randomUUID().toString();
+//        uuidToken = uuidToken.replace("-","");
+//        //建议token和用户登陆态之间的联系
+//        redisTemplate.opsForValue().set(uuidToken,userModel);
+//        redisTemplate.expire(uuidToken,1, TimeUnit.HOURS);
+//
+//        //下发了token
+//        return ApiRestResponse.success(uuidToken);
+//    }
 
     @Autowired
     private TokenEndpoint tokenEndpoint;
@@ -141,7 +142,11 @@ public class UserController{
      * Oauth2登录认证
      */
     @PostMapping(value = "/oauth/token")
-    public ApiRestResponse postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+    public ApiRestResponse postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException, NoSuchAlgorithmException {
+        String password1 = parameters.get("password");
+        if(password1==null)
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PASSWORD_ERROR);
+        parameters.put("password", MD5Utils.getMDStr(password1));
         OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         Oauth2TokenDto oauth2TokenDto = Oauth2TokenDto.builder()
                 .token(oAuth2AccessToken.getValue())

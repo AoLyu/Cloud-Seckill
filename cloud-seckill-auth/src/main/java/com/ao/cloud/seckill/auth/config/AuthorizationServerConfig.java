@@ -94,7 +94,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 //配置grant_type，表示授权类型
                 .authorizedGrantTypes("authorization_code", "password", "refresh_token");
 
-        //应当用授权服务器clients.withClientDetails(clientDetailsService);
+//        应当用授权服务器
+//        clients.withClientDetails(clientDetailsService);
 
     }
 

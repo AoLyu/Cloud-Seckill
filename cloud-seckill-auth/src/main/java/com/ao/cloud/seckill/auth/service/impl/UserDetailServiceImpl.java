@@ -1,7 +1,10 @@
 package com.ao.cloud.seckill.auth.service.impl;
 
 import com.ao.cloud.seckill.auth.model.dataobject.User;
+import com.ao.cloud.seckill.auth.model.pojo.UserModel;
 import com.ao.cloud.seckill.auth.service.UserService;
+import com.ao.cloud.seckill.common.exception.CloudSeckillExceptionEnum;
+import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,9 +27,13 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //待完成
         //使用userService完成用户登录
+        UserModel userModel = userService.getUserByName(username);
 
-        String password = passwordEncoder.encode("123456");
-        return new User("admin", password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        if(userModel==null)
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PASSWORD_ERROR);
+//        String password = userModel.getEncrptPassword();
+        String password = passwordEncoder.encode(userModel.getEncrptPassword());
+        return new User(username, password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
 //        return null;
     }
