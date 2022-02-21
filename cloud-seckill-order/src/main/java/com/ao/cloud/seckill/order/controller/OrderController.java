@@ -8,6 +8,7 @@ import com.ao.cloud.seckill.order.feign.ItemFeignClient;
 import com.ao.cloud.seckill.order.model.pojo.OrderModel;
 import com.ao.cloud.seckill.order.mq.MqProducer;
 import com.ao.cloud.seckill.order.service.OrderService;
+import com.google.common.util.concurrent.RateLimiter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class OrderController  {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
-//    private RateLimiter orderCreateRateLimiter;
+    private RateLimiter orderCreateRateLimiter;
 
     @PostConstruct
     public void init(){
@@ -63,7 +64,7 @@ public class OrderController  {
             }
         };
         threadPoolExecutor = new ThreadPoolExecutor(20,20,0,TimeUnit.MINUTES,queue,nameThreadFactory);
-//        orderCreateRateLimiter = RateLimiter.create(300);
+        orderCreateRateLimiter = RateLimiter.create(200);
     }
 
     //生成秒杀令牌
@@ -129,9 +130,9 @@ public class OrderController  {
                                        @RequestParam(name="promoToken")String promoToken
                                         ) throws CloudSekillException {
 
-//        if(!orderCreateRateLimiter.tryAcquire()){
-//            throw new CloudSekillException(CloudSeckillExceptionEnum.RATELIMIT);
-//        }
+        if(!orderCreateRateLimiter.tryAcquire()){
+            throw new CloudSekillException(CloudSeckillExceptionEnum.RATELIMIT);
+        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userId = request.getHeader("user_id");
         //判断是否库存已售罄，若对应的售罄key存在，则直接返回下单失败
