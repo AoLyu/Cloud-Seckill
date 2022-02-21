@@ -10,6 +10,7 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,7 @@ public class MqConsumer {
     public void init() throws MQClientException {
         consumer = new DefaultMQPushConsumer("stock_consumer_group");
         consumer.setNamesrvAddr(nameAddr);
+        consumer.setMessageModel(MessageModel.CLUSTERING);   // 集群消费
         consumer.subscribe(topicName,"*");
 
         consumer.registerMessageListener(new MessageListenerConcurrently() {

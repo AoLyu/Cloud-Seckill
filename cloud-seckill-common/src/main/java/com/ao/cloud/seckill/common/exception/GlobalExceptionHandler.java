@@ -24,26 +24,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public  ApiRestResponse handlerException(Exception e){
-        log.error("Default Exception: ", e.getMessage());
+        log.error("Default Exception: " + e.getMessage());
         return ApiRestResponse.error(CloudSeckillExceptionEnum.SYSTEM_ERROR );
     }
 
 
     @ExceptionHandler(CloudSekillException.class)
     public  ApiRestResponse handlerCloudSeckillException(CloudSekillException e){
-        log.error("CloudSeckillException: ", e.getMsg());
+        log.error("CloudSeckillException: " + e.getMsg());
         return ApiRestResponse.error(e.getCode(),e.getMsg());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiRestResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
-        log.error("MethodArgumentNotValidException: " ,e.getMessage());
+        log.error("MethodArgumentNotValidException: "+ e.getMessage());
         return handleBindingResult(e.getBindingResult());
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiRestResponse handlerNotFoundException(NoHandlerFoundException e){
-        log.error("MethodArgumentNotValidException: " ,e.getMessage());
+        log.error("MethodArgumentNotValidException: "+e.getMessage());
         return ApiRestResponse.error(CloudSeckillExceptionEnum.REQUEST_ERROR);
     }
 
