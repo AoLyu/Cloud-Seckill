@@ -8,6 +8,8 @@ import com.ao.cloud.seckill.item.model.vo.ItemVO;
 import com.ao.cloud.seckill.item.service.CacheService;
 import com.ao.cloud.seckill.item.service.ItemService;
 import com.ao.cloud.seckill.item.service.PromoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-
+@Api("商品模块")
 @RestController
 public class ItemController  {
 
@@ -40,6 +42,7 @@ public class ItemController  {
     private PromoService promoService;
 
     //创建商品的controller
+    @ApiOperation("新增商品")
     @PostMapping(value = "/create")
     public ApiRestResponse createItem(@RequestParam(name = "title")String title,
                                        @RequestParam(name = "description")String description,
@@ -67,6 +70,7 @@ public class ItemController  {
         return ApiRestResponse.success("Current User Id is:"+userId);
     }
 
+    @ApiOperation("发布秒杀活动")
     @PostMapping(value = "/publishpromo")
     public ApiRestResponse publishpromo(@RequestParam(name = "id")Integer id){
         promoService.publishPromo(id);
@@ -92,6 +96,7 @@ public class ItemController  {
     }
 
     //商品详情页浏览
+    @ApiOperation("获取商品详情")
     @GetMapping(value = "/get")
     public ApiRestResponse getItem(@RequestParam(name = "id")Integer id){
         ItemModel itemModel = null;
@@ -121,6 +126,7 @@ public class ItemController  {
     }
 
     //商品列表页面浏览
+    @ApiOperation("获取商品列表")
     @GetMapping(value = "/list")
     public ApiRestResponse listItem(){
         List<ItemModel> itemModelList = itemService.listItem();

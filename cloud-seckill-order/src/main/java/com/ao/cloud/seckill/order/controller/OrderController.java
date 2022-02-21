@@ -8,6 +8,8 @@ import com.ao.cloud.seckill.order.feign.ItemFeignClient;
 import com.ao.cloud.seckill.order.model.pojo.OrderModel;
 import com.ao.cloud.seckill.order.mq.MqProducer;
 import com.ao.cloud.seckill.order.service.OrderService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
@@ -25,7 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
-
+@Api("订单模块")
 @RestController
 public class OrderController  {
 
@@ -65,6 +67,7 @@ public class OrderController  {
     }
 
     //生成秒杀令牌
+    @ApiOperation("获取秒杀令牌")
     @PostMapping("/generateSecondKillToken")
     public ApiRestResponse generateSecondKillToken(@RequestParam(name="itemId")Integer itemId,
                                                    @RequestParam(name="promoId")Integer promoId,
@@ -102,6 +105,7 @@ public class OrderController  {
     }
 
     //生成验证码
+    @ApiOperation("获取防刷验证码")
     @RequestMapping(value = "/generateverifycode",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void generateverifycode(HttpServletRequest request,HttpServletResponse response) throws CloudSekillException, IOException {
@@ -116,7 +120,8 @@ public class OrderController  {
         ImageIO.write((RenderedImage) map.get("codePic"), "jpeg", response.getOutputStream());
     }
 
-        //封装下单请求
+    //封装下单请求
+    @ApiOperation("下单")
     @PostMapping(value = "/createorder")
     public ApiRestResponse createOrder(@RequestParam(name="itemId")Integer itemId,
                                         @RequestParam(name="amount")Integer amount,

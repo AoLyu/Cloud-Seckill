@@ -31,6 +31,12 @@ public class UserFilter extends ZuulFilter {
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
         String requestURI = request.getRequestURI();
+        if(requestURI.contains("webjars")
+                ||requestURI.contains("webjars")
+                ||requestURI.contains("resources")
+                ||requestURI.contains("swagger")
+                ||requestURI.contains("api-docs"))
+            return false;
 
         if(requestURI.contains("order")||requestURI.contains("/item/generateSecondKillToken"))
             return true;

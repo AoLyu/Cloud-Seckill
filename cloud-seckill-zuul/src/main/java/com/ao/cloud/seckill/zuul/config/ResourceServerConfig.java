@@ -27,7 +27,19 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/auth/**","/item/*get","/item/list**")
+                .antMatchers("/auth/**",
+                        "/item/*get",
+                        "/item/list**",
+                        "/webjars/**",
+                        "/resources/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/v2/api-docs",
+                        "/*/webjars/**",
+                        "/*/resources/**",
+                        "/*/swagger-ui.html",
+                        "/*/swagger-resources/**",
+                        "/*/v2/api-docs")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

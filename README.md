@@ -16,11 +16,15 @@
 
 #### 部署
 
-需要三台虚拟机：
+需要三台虚拟机，因为是本机调试，所以可以关掉CentOS的防火墙：
+
+![虚拟机配置](F:\IdeaProjects\Cloud-Seckill\docs\12虚拟机配置.png)
 
 1. 中间件（2核4G ）
 
-   已使用Docker-compose进行了集成，MySQL，Redis，RocketMQ，OpenResty）将DockerMiddleware文件夹移入虚拟机中，在docker-compose.yml下运行docker-compose up -d即可。相关配置（如mysql端口、用户、初始密码等）见docker-compose.yml文件。相关中间件的配置见对应的conf目录。mysql文件夹里的init.sql中有本项目用到的数据库。nginx反向代理负载均衡在nginx.conf中修改。
+   ​        已使用Docker-compose进行了集成，MySQL，Redis，RocketMQ，OpenResty）将DockerMiddleware文件夹移入虚拟机中，在**docker-compose.yml**所在目录下运行`docker-compose up -d`命令构建容器镜像并运行即可。
+
+   ​        相关配置（如mysql端口、用户、初始密码等）见docker-compose.yml文件。相关中间件的配置见对应的conf目录。mysql文件夹里的init.sql中有本项目用到的数据库。nginx反向代理负载均衡在nginx.conf中修改。
 
    **目录结构如下：**
 
@@ -49,7 +53,7 @@
 
 2. **app1** （2核4G）
 
-   项目克隆后先clean，然后rebuild，compile，package打包后，**按如下目录结构进行部署：**
+   项目克隆后先clean，然后rebuild，compile，package打包.jar文件后，**按如下目录结构进行部署：**
 
    ```bash
    Cloud-seckill/
@@ -72,7 +76,7 @@
    
    ```
 
-   在Cloud-seckill目录下，`docker-compose up -d` 进行构建。
+   在Cloud-seckill目录下（**docker-compose.yml**所在目录），运行`docker-compose up -d` 进行构建容器运行。
 
    
 
@@ -80,7 +84,19 @@
 
    
 
-#### 简易使用过程：
+#### Swagger文档
+
+打开浏览器输入swagger-ui地址，查看接口
+
+```html
+192.168.174.12/swagger-ui.html
+```
+
+192.168.174.12是中间件主机（Nginx）的地址
+
+![swagger-ui](F:\IdeaProjects\Cloud-Seckill\docs\13SwaggerUI.png)
+
+#### Postman接口测试：
 
 前端未完成，暂使用Postman进行测试：
 

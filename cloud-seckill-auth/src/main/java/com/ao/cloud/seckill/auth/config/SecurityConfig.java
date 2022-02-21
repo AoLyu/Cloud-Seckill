@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,7 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/oauth/**", "/login/**", "/logout/**")
+                .antMatchers("/oauth/**",
+                        "/logout/**",
+                        "/webjars/**",
+                        "/resources/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/v2/api-docs")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -42,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .permitAll();
     }
-
 
 //    /**
 //     * 配置用户签名服务 主要是user-details 机制，身份验证管理生成器

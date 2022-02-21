@@ -8,6 +8,8 @@ import com.ao.cloud.seckill.common.exception.CloudSeckillExceptionEnum;
 import com.ao.cloud.seckill.common.exception.CloudSekillException;
 import com.ao.cloud.seckill.common.response.ApiRestResponse;
 import com.ao.cloud.seckill.common.util.MD5Utils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-
+@Api(value = "用户模块")
 @RestController
 public class UserController{
 
@@ -43,6 +45,7 @@ public class UserController{
     private RedisTemplate redisTemplate;
 
     //用户注册接口
+    @ApiOperation("用户注册")
     @PostMapping(value = "/user/register")
     public ApiRestResponse register(@RequestParam(name="telephone")String telephone,
                                     @RequestParam(name="otpCode")String otpCode,
@@ -68,6 +71,7 @@ public class UserController{
     }
 
     //用户获取otp短信接口
+    @ApiOperation("获取手机验证码")
     @GetMapping(value = "/user/getotp")
     public ApiRestResponse getOtp(@RequestParam(name="telephone")String telephone){
         //需要按照一定的规则生成OTP验证码
@@ -85,6 +89,7 @@ public class UserController{
         return ApiRestResponse.success(null);
     }
 
+    @ApiOperation("获取用户信息")
     @GetMapping("/get")
     public ApiRestResponse getUser(@RequestParam(name="id") Integer id) throws CloudSekillException {
         //调用service服务获取对应id的用户对象并返回给前端
@@ -141,6 +146,7 @@ public class UserController{
     /**
      * Oauth2登录认证
      */
+    @ApiOperation("用户登录获取jwt")
     @PostMapping(value = "/oauth/token")
     public ApiRestResponse postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException, NoSuchAlgorithmException {
         String password1 = parameters.get("password");
