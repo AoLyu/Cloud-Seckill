@@ -4,9 +4,13 @@
 
 ​        后期会逐步完善各种功能。
 
+---
+
+[TOC]
+
 #### 主要技术栈：
 
-1. SpringBoot
+1. SpringBoot (SSM框架)
 2. SpringCloud（目前使用Netflix版，注册中心Eureka, 网关Zuul( 集成 客户端负载均衡 Ribbon ，断路器Hystrix）
 3. Mysql
 4. Redis
@@ -162,13 +166,21 @@
 
 #### 压测
 
-1. 商品详情接口
+1. 商品详情接口优化前
+
+   ![商品详情接口优化前](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\01原始.png)
+
+2. 商品详情接口优化后
 
    ![查询优化前](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\02优化后查询接口.png)
 
-2. 下单接口 （线程数500， 启动15秒，重复 40）
+3. 下单接口优化前
 
-   ![下单接口](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\下单接口压测.png)
+   ![下单接口优化前](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\03原始下单.png)
+
+4. 下单接口优化后
+
+   ![2](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\下单接口压测.png)
 
    成功下单结果：
 

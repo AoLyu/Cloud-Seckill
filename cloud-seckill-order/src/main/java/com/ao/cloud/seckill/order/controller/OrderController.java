@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -93,7 +94,7 @@ public class OrderController  {
         //获取秒杀大闸的count数量
         long result = redisTemplate.opsForValue().increment("promo_door_count_"+promoId,-1);
         if(result < 0){
-            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"生成令牌失败");
+            throw new CloudSekillException(CloudSeckillExceptionEnum.PARAMETER_VALIDATION_ERROR.getCode(),"抢购失败");
         }
 
         //生成秒杀令牌，存入redis内并给一个5分钟的有效期
@@ -157,26 +158,30 @@ public class OrderController  {
 //        }
 //        同步调用线程池的submit方法
 //        拥塞窗口为20的等待队列，用来队列化泄洪
+        String orderNo = null;
         Future<Object> future = threadPoolExecutor.submit(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 //加入库存流水init状态
                 String stockLogId = orderService.initStockLog(itemId,amount);
                 //再去完成对应的下单事务型消息机制
-                if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,amount,promoId,stockLogId)){
-                    throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
+                String orderNo = orderService.generateOrderNo();
+                if(!mqProducer.transactionAsyncReduceStock(Integer.parseInt(userId) ,itemId,amount,promoId,stockLogId,orderNo)){
+                    throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"抢购失败");
                 }
-                return null;
+                return orderNo;
             }
         });
         try {
-            future.get();
+            orderNo = future.get().toString();
         } catch (InterruptedException e) {
-            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
+            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"抢购失败");
         } catch (ExecutionException e) {
-            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"下单失败");
+            throw new CloudSekillException(CloudSeckillExceptionEnum.UNKNOWN_ERROR.getCode(),"抢购失败");
         }
-        return ApiRestResponse.success(null);
+        Map<String,String> result = new HashMap<>();
+        result.put("orderNo",orderNo);
+        return ApiRestResponse.success(result);
     }
 
     //封装下单请求

@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId) throws CloudSekillException {
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId,String orderNo) throws CloudSekillException {
         //1.校验下单状态,下单的商品是否存在，用户是否合法，购买数量是否正确
         //ItemModel itemModel = itemService.getItemById(itemId);
         // Feign远程获取物品当前价格。
@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         orderModel.setOrderPrice(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
 
         //生成交易流水号,订单号
-        orderModel.setId(generateOrderNo());
+        orderModel.setId(orderNo);
         OrderDO orderDO = convertFromOrderModel(orderModel);
         orderDOMapper.insertSelective(orderDO);
 
@@ -140,7 +140,8 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    String generateOrderNo(){
+    @Override
+    public String generateOrderNo(){
         //订单号有16位
         StringBuilder stringBuilder = new StringBuilder();
         //前8位为时间信息，年月日
@@ -151,11 +152,14 @@ public class OrderServiceImpl implements OrderService {
         //中间6位为自增序列
         //获取当前sequence
         int sequence = 0;
+        // 这里可以优化吧
+        //#####
         SequenceDO sequenceDO =  sequenceDOMapper.getSequenceByName("order_info");
         sequence = sequenceDO.getCurrentValue();
         sequenceDO.setCurrentValue(sequenceDO.getCurrentValue() + sequenceDO.getStep());
         sequenceDOMapper.updateByPrimaryKeySelective(sequenceDO);
         String sequenceStr = String.valueOf(sequence);
+        //
         for(int i = 0; i < 6-sequenceStr.length();i++){
             stringBuilder.append(0);
         }

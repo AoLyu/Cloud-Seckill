@@ -55,8 +55,9 @@ public class MqProducer {
                 Integer userId = (Integer) ((Map)arg).get("userId");
                 Integer amount = (Integer) ((Map)arg).get("amount");
                 String stockLogId = (String) ((Map)arg).get("stockLogId");
+                String orderNo =(String) ((Map)arg).get("orderNo");
                 try {
-                    orderService.createOrder(userId,itemId,promoId,amount,stockLogId);
+                    orderService.createOrder(userId,itemId,promoId,amount,stockLogId,orderNo);
                 } catch (CloudSekillException e) {
                     e.printStackTrace();
                     //设置对应的stockLog为回滚状态
@@ -73,8 +74,8 @@ public class MqProducer {
                 //根据是否扣减库存成功，来判断要返回COMMIT,ROLLBACK还是继续UNKNOWN
                 String jsonString  = new String(msg.getBody());
                 Map<String,Object>map = JSON.parseObject(jsonString, Map.class);
-                Integer itemId = (Integer) map.get("itemId");
-                Integer amount = (Integer) map.get("amount");
+//                Integer itemId = (Integer) map.get("itemId");
+//                Integer amount = (Integer) map.get("amount");
                 String stockLogId = (String) map.get("stockLogId");
                 StockLogDO stockLogDO = orderService.getStockLogDOById(stockLogId);
                 if(stockLogDO == null){
@@ -92,7 +93,7 @@ public class MqProducer {
 
     //事务型同步库存扣减消息
     //事务型消息不支持延时消费 setDelayTimeLevel
-    public boolean transactionAsyncReduceStock(Integer userId,Integer itemId,Integer amount,Integer promoId,String stockLogId){
+    public boolean transactionAsyncReduceStock(Integer userId,Integer itemId,Integer amount,Integer promoId,String stockLogId,String orderNo){
         Map<String,Object> bodyMap = new HashMap<>();
         bodyMap.put("itemId",itemId);
         bodyMap.put("amount",amount);
@@ -104,6 +105,7 @@ public class MqProducer {
         argsMap.put("userId",userId);
         argsMap.put("promoId",promoId);
         argsMap.put("stockLogId",stockLogId);
+        argsMap.put("orderNo",orderNo);
 
         Message message = new Message(topicName,"increase",
                 JSON.toJSON(bodyMap).toString().getBytes(Charset.forName("UTF-8")));
