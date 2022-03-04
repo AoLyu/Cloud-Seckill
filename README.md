@@ -1,6 +1,6 @@
 ## 分布式简易秒杀系统
 
-​         java个人练习项目，仅后端部分，参考[miaosha_Shop](https://github.com/MaJesTySA/miaosha_Shop)完成，接口略有变化，目前使用SpringCloud Netflix版，暂没有使用配置中心，Alibaba版在学（后期提供）。目前仅支持个人注册及jwt网关认证，查询商品及发布秒杀下单操作。
+​         Java个人练习项目，仅后端部分，目前使用SpringCloud Netflix版，暂没有使用配置中心，Alibaba版（后期提供）。目前仅支持个人注册及jwt网关认证，商品查询及秒杀下单操作。
 
 ​        后期会逐步完善各种功能。
 
@@ -84,7 +84,7 @@
 
    
 
-3.  **app2 **（2核4G，可由app1克隆后修改对应的静态IP即可）
+3.     **app2**（2核4G，可由app1克隆后修改对应的静态IP即可）
 
    
 
