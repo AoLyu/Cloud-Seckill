@@ -111,6 +111,7 @@ services:
     volumes:
       - ./nginx/conf:/usr/local/openresty/nginx/conf
       - ./nginx/logs:/usr/local/openresty/nginx/logs
+      - ./nginx/lua:/usr/local/openresty/lua
       - ./nginx/vhost:/etc/nginx/conf.d
       - ./nginx/site:/etc/nginx/site
     networks:

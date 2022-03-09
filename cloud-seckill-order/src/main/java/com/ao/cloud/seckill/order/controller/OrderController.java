@@ -56,7 +56,6 @@ public class OrderController  {
 
     @PostConstruct
     public void init(){
-//        executorService = Executors.newFixedThreadPool(20);
         BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(500);
         ThreadFactory nameThreadFactory = new ThreadFactory() {
             @Override
@@ -64,7 +63,14 @@ public class OrderController  {
                 return new Thread(r);
             }
         };
-        threadPoolExecutor = new ThreadPoolExecutor(20,20,0,TimeUnit.MINUTES,queue,nameThreadFactory);
+        threadPoolExecutor = new ThreadPoolExecutor(
+                20,
+                20,
+                0,
+                TimeUnit.MINUTES,
+                queue,
+                nameThreadFactory,
+                new ThreadPoolExecutor.CallerRunsPolicy());
         orderCreateRateLimiter = RateLimiter.create(200);
     }
 
