@@ -35,7 +35,7 @@ public class MqProducer {
     @Autowired
     private OrderService orderService;
 
-    @PostConstruct
+    onstruct
     public void init() throws MQClientException {
         //做mq producer的初始化
         producer = new DefaultMQProducer("producer_group");

@@ -1,6 +1,6 @@
 ## 分布式简易秒杀系统
 
-​         Java个人练习项目，仅后端部分，目前使用SpringCloud Netflix版，暂没有使用配置中心，Alibaba版（后期提供）。目前仅支持个人注册及jwt网关认证，商品查询及秒杀下单操作。
+​         Java个人练习项目，仅后端部分，目前使用Eureka版，暂没有使用配置中心，nacos版（后期提供）。目前仅支持个人注册及jwt网关认证，商品查询及秒杀下单操作。
 
 ​        后期会逐步完善各种功能。
 
@@ -22,7 +22,7 @@
 
 需要三台虚拟机，因为是本机调试，所以可以关掉CentOS的防火墙：
 
-![虚拟机配置](F:\IdeaProjects\Cloud-Seckill\docs\12虚拟机配置.png)
+![虚拟机配置](docs/12虚拟机配置.png)
 
 1. 中间件（2核4G ）
 
@@ -98,7 +98,7 @@
 
 192.168.174.12是中间件主机（Nginx）的地址
 
-![swagger-ui](F:\IdeaProjects\Cloud-Seckill\docs\13SwaggerUI.png)
+![swagger-ui](docs/13SwaggerUI.png)
 
 #### Postman接口测试：
 
@@ -114,11 +114,11 @@
 
 3. 利用该短信验证码注册用户信息，并注册，手机号验证码虚一致
 
-   ![填写用户信息](F:\IdeaProjects\Cloud-Seckill\docs\03注册用户信息.png)
+   ![填写用户信息](docs/03注册用户信息.png)
 
 4. 根据商品Id查看商品详情，查看商品不需要登录认证。
 
-   ![查看商品详情](F:\IdeaProjects\Cloud-Seckill\docs\05根据商品id获取商品详情.png)
+   ![查看商品详情](docs/05根据商品id获取商品详情.png)
 
    
 
@@ -126,39 +126,39 @@
 
    Authorization里填写jwt发放者信息(照填即可)
 
-   ![填写用户密码，及jwt颁发者信息](F:\IdeaProjects\Cloud-Seckill\docs\04填写发放jwt的client信息.png)
+   ![填写用户密码，及jwt颁发者信息](docs/04填写发放jwt的client信息.png)
 
    Body里填写用户信息
 
-   ![填写用户信息](F:\IdeaProjects\Cloud-Seckill\docs\06填写发放jwt的用户信息.png)
+   ![填写用户信息](docs/06填写发放jwt的用户信息.png)
 
 6. 秒杀前确保商品库存大于零，否则下单失败。
 
-   ![库存大于零](F:\IdeaProjects\Cloud-Seckill\docs\07确保商品数量大于零.png)
+   ![库存大于零](docs/07确保商品数量大于零.png)
 
 7. 发布秒杀活动，不发布则按原价扣费（Header里需填写Authorization Bear 你的JWT令牌【见步骤7】，目前还未进行RBAC角色控制，即通过认证均可以发布秒杀活动）
 
-   ![发布秒杀活动](F:\IdeaProjects\Cloud-Seckill\docs\07发布秒杀活动.png)
+   ![发布秒杀活动](docs/07发布秒杀活动.png)
 
 8. 秒杀前先获取，防刷验证码
 
-   ![防刷验证码](F:\IdeaProjects\Cloud-Seckill\docs\08填写用户的jwt获取秒杀防刷验证码.png)
+   ![防刷验证码](docs/08填写用户的jwt获取秒杀防刷验证码.png)
 
 9. 下单前先获取秒杀令牌（令牌大闸，按秒杀商品数量的5倍发放）（需由前端将此步骤与步骤10写进一个按钮）
 
-   ![获取秒杀令牌](F:\IdeaProjects\Cloud-Seckill\docs\09根据秒杀验证码获取秒杀令牌.png)
+   ![获取秒杀令牌](docs/09根据秒杀验证码获取秒杀令牌.png)
 
    令牌获取失败（数额不够，验证码错误等情况）
 
-   ![令牌获取失败](F:\IdeaProjects\Cloud-Seckill\docs\09根据秒杀验证码获取秒杀令牌失败.png)
+   ![令牌获取失败](docs/09根据秒杀验证码获取秒杀令牌失败.png)
 
 10. 填写秒杀Token，下单（对于前端和步骤9在一个按钮里完成）
 
-    ![下单操作](F:\IdeaProjects\Cloud-Seckill\docs\10根据秒杀令牌下单成功.png)
+    ![下单操作](docs/10根据秒杀令牌下单成功.png)
 
     下单失败情况（没有库存，秒杀Token不对或未获取等情况）。
 
-    ![下单失败](F:\IdeaProjects\Cloud-Seckill\docs\10根据秒杀令牌下单失败.png)
+    ![下单失败](docs/10根据秒杀令牌下单失败.png)
 
 11. 下单后可以去数据库看订单库存等变化，或实现根据用户ID获取订单的接口（未完成）。。。
 
@@ -168,27 +168,27 @@
 
 1. 商品详情接口优化前
 
-   ![商品详情接口优化前](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\01原始.png)
+   ![商品详情接口优化前](docs/jmeter/01原始.png)
 
 2. 商品详情接口优化后
 
-   ![查询优化前](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\02优化后查询接口.png)
+   ![查询优化前](docs/jmeter/02优化后查询接口.png)
 
 3. 下单接口优化前
 
-   ![下单接口优化前](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\03原始下单.png)
+   ![下单接口优化前](docs/jmeter/03原始下单.png)
 
 4. 下单接口优化后
 
-   ![2](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\下单接口压测.png)
+   ![2](docs/jmeter/下单接口压测.png)
 
    成功下单结果：
 
-   ![](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\06下单成功.png)
+   ![](docs/jmeter/06下单成功.png)
 
    下单失败效果：
 
-   ![](F:\IdeaProjects\Cloud-Seckill\docs\jmeter\05下单失败.png)
+   ![](docs/jmeter/05下单失败.png)
 
 #### Reference:
 

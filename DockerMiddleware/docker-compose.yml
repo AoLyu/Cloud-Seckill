@@ -10,18 +10,22 @@ services:
       ##root账号的密码
       - MYSQL_ROOT_PASSWORD=root123456
       - LANG=C.UTF-8
-      - TZ=Asia/Shanghai  
+      - TZ=Asia/Shanghai
+
     image: "docker.io/mysql:latest" 
     container_name: mysql
     restart: always
     # command: --default-authentication-plugin=mysql_native_password #这行代码解决无法访问的问题 
-    command: --default-authentication-plugin=caching_sha2_password #这行代码解决无法访问的问题 
+    command: 
+      --default-authentication-plugin=caching_sha2_password
+      --lower_case_table_names=1
     ##映射挂载
     volumes:
       ##数据目录，要确保先创建好
         - "/data/mysql:/var/lib/mysql"
         ##初始化的脚本，初始化我们存放的init.sql文件
         - "./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql"
+        - "./mysql/log:/var/log/mysql"
     ports:
         - "3306:3306"
     networks:
@@ -118,6 +122,34 @@ services:
       rmq:
         aliases:
           - nginx
+
+  nacos:
+    image: 'nacos/nacos-server'
+    restart: always
+    ports:
+      - 8848:8848
+      - 9848:9848
+      - 9849:9849
+    environment:
+        - TZ=Asia/Shanghai
+        - MODE=standalone
+    networks:
+      rmq:
+        aliases:
+          - nacos
+
+  sentinel:
+    image: 'bladex/sentinel-dashboard'
+    restart: always
+    ports:
+      - 8858:8858
+    environment:
+        - TZ=Asia/Shanghai
+    networks:
+      rmq:
+        aliases:
+          - sentinel
+
 networks:
   rmq:
     # name: rmq
